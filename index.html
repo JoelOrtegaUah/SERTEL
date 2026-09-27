@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es"> <!-- Configuramos el idioma de la web para que se use el Español-->
+<head>
+  <meta charset=UTF-8"> <!--Permite utilizar la codificación UTF-8 para traducir caracteres de texto a numeros binarios-->
+  <!--Configuracion de la ventana grafica-->
+  <!--Adaptamos el ancho de la pagina al ancho del dispositivo y despues establecemos el nivel de zoom al 100% por defecto-->
+  <meta name="viewport" content="width-device-width, initial-scale=1.0">
+  <!--Metadato de descripcion-->
+  <!--Proporcionamos un breve resumen del contenido del sitio web-->
+  <meta name="description" content="Diseño de una habitacion con sensores">
+  <!--Titulo del documento-->
+  <title>Smart Room Project </title>
+  <!--Enlace a la hoja de estilos externa-->
+  <!--Conectamos este archivo HTML con el archivo de estilos CSS de css/iroom.css-->
+  <link rel="stylesheet" href="css/iroom.css">
+</head>
+<body>
+  <!--Encabezado principal con el estilo h1 -->
+  <header>
+    <h1>Smart Room Project</h1>
+  </header>
+  
+  <!--Menu de navegacion-->
+  <div class="menu-container">
+    <!--Definimos atributo aria-label para que se sepa de que menu estamos hablando-->
+    <nav aria-label="Menu principal">
+      <!--Lista no ordenada-->
+      <ul>
+        <!--Elementos de la lista con li y enlaces con a-->
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="config.html">Configuración</a></li>
+        <li><a href="minombre.html">Nombre</a></li>
+      </ul>
+    </nav>
+    
+    <!---->
+    <!--Con aside representamos el contenido relacionado de forma secundaria con el contenido principal-->
+    <aside id="info-aside">
+      <!--span se usa para agrupar texto o partes pequeñas de contenido sin crear un salto de linea-->
+      <!--Le aplicamos el atributo para encontrarlo mas adelante de una forma muy sencilla-->
+      <span id="welcome-message">Hola invitado: Bienvenido a Smart Room</span>
+    </aside>
+  </div>
+  
+  <main>
+  <!-- Primera seccion para los datos de la habitacion-->
+    <section class="room-data">
+      <h2>Datos de la habitación</h2>
+      <ul>
+        <li><strong>Sala:</strong> Habitación de invitados</li>
+        <li><strong>País:</strong> España</li>
+        <li><strong>Ciudad:</strong> Alcalá de Henares</li>
+        <li><strong>Código Postal:</strong> 28801</li>
+        <li>
+          <strong>Ubicación:</strong>
+          <a href="https://www.google.com/?q=40.5081172,-3.3756315,14" target="_blank" rel="noopener noreferrer">
+            Localización Google Maps
+          </a>
+        </li>
+      </ul>
+      
+      <!-- Imagen de la habitación y texto alternativo adecuado-->
+      <figure>
+        <img src="/home/jawel/iroom-dev/images/room.jpeg" alt="Vista de la habitación Smart Room">
+        <figcaption>Vista de la habitación inteligente</figcaption>
+      </figure>
+    </section>
+    
+    <!--Sección de los datos de los sensores-->
+    <section class="sersor-data">
+      <h2>Datos de los sensores</h2>
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Sensor</th>
+            <th scope="col">Lectura actual</th>
+            <th scope="col">Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Temperatura</td>
+            <td>21.5 ºC</td>
+            <td>Normal</td>
+          </tr>
+          <tr>
+            <td>Humedad</td>
+            <td>45%</td>
+            <td>Bajo</td>
+          </tr>
+          <tr>
+            <td>Nivel de luz</td>
+            <td>320 lux</td>
+            <td>Adecuado</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    
+  </main>
+  
+  <!--Pie de pagina-->
+  <footer>
+    <p>Universidad e Alcalá</p>
+  </footer>
+  
+  <!--Script para recuperar el nombre guardado en LocalStorage -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedName = localStorage.getItem('fname');
+      if (savedName){
+        document.getElemetById('welcome-message').textContent = 'Hola ${savedName}: Bienvenido a Smart Room';
+      }
+    });
+  </script>
+
+</body>
+</html>
+    
+    
