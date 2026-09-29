@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es"> <!-- Configuramos el idioma de la web para que se use el Español-->
+<head>
+  <meta charset=UTF-8">
+  <meta name="viewport" content="width-device-width, initial-scale=1.0">
+  <meta name="description" content="Configuración de la habitación y sensores Smart Room">
+  <title>Smart Room Project - Configuración</title>
+  <link rel="stylesheet" href="css/iroom.css">
+</head>
+<body>
+  <!--Encabezado principal-->
+  <header>
+    <h1>Smart Room Project</h1>
+  </header>
+  
+  <main>
+  <!--Ahora crearemos el formulario que engloba el formulario de la habitación y de los sensores-->
+    <form action="datos.js" method="POST" id="config-form">
+      <div class="form-container">
+        <!--Formulario de los datos de la habitación, columna izquierda-->
+        <fieldset class="form-column">
+          <legend><h2>Datos de la habitación</h2></legend>
+          
+          <p>
+            <!--En el caso del Pais, haremos una lista de sugerencia con datalist-->
+            <label for="country">País:</label><br>
+            <input type="text" id="country" name="country" list="country" placeholder="Seleccione o escriba..." required>
+            <!--Ahora escribimos la lista de sugerencias-->
+            <datalist id="country-list">
+              <option value="España">
+              <option value="Francia">              
+              <option value="Portugal">            
+              <option value="Italia">
+              <option value="Alemania">
+            </datalist>
+          </p>
+          
+          <p>
+           <label for="city">Ciudad:</label><br>
+           <input type="text" id="city" name="city" required>
+          </p>
+          
+          <p>
+           <label for="gps">Localización:</label><br>
+           <input type="text" id="gps" name="gps" placeholder="Ej: 40.5126° N, 3.3496° O" required>
+          </p>
+          
+          <p>
+           <label for="map-url">Mapa (URL):</label><br>
+           <input type="url" id="map-url" name="map_url" placeholder="https://maps.google.com/..." required>
+          </p>
+          
+          <p>
+           <label for="photo">Foto:</label><br>
+           <input type="file" id="photo" name="photo" accept="image/*" required>
+          </p>
+          
+          <p>
+           <label for="password">Contraseña:</label><br>
+           <input type="password" id="password" name="password" required>
+          </p>
+          
+          <p>
+            <button type="sumbit" id="btn-sumbit">Enviar datos</button>
+          </p>
+          
+        </fieldset>
+        
+        <!--Columna de la derecha para la configuración de los sensores y alertas-->
+        <fieldset class="form-column">
+          <legend><h2>Seleccione los sensores</h2></legend>
+          
+          <p>
+           <input type="checkbox" id="sensor-temp" name="sensors" value="temperatura" checked>
+           <label for="sensor-temp">Temperatura</label>
+          </p>
+          <p>
+           <input type="checkbox" id="sensor-hum" name="sensors" value="humedad" checked>
+           <label for="sensor-hum">Humedad</label>
+          </p>
+          <p>
+           <input type="checkbox" id="sensor-sound" name="sensors" value="sonido" checked>
+           <label for="sensor-sound">Nivel de sonido</label>
+          </p>
+          <p>
+           <input type="checkbox" id="sensor-light" name="sensors" value="luz" checked>
+           <label for="sensor-light">Nivel de luz</label>
+          </p>
+          <p>
+           <input type="checkbox" id="sensor-mov" name="sensors" value="movimiento" checked>
+           <label for="sensor-mov">Movimiento</label>
+          </p>
+          
+          <hr>
+          
+          <h3>Configure alertas</h3>
+          
+          <p>
+            <label for="temp-max">Temperatura máxima (ºC):</label><br>
+            <input type="number" id="temp-max" name="temp_max" min="-20" max="45" step="0.5" value="30">
+          </p>
+          <p>
+          <label for="temp-min">Temperatura mínima (ºC):</label><br>
+          <input type="number" id="temp-min" name="temp_min" min="-20" max="45" step="0.5" value="15">
+          </p>
+          
+          <!--Ahora creamos un apartado en el que se muestre el resultado de la diferencia de temperatura-->
+          <!--En el caso de que los datos introducidos no sean válidos el script de abajo lanzará el error-->
+          
+          <script>
+            //Definimos las constantes que nos pasa el usuario
+            const tempMax = document.getElementById('temp-max');
+            const tempMin = document.getElemntById('temp-min');
+            const tempDiff = document.getElementById('temp-diff');
+            
+            function actualizarDiferencia() {
+              const max = parseFloat(tempMax.value);
+              const min = parseFloat(tempMin.value);
+              
+              //Corregimos posibles errores
+              if (isNaN(max) || isNaN(min)){
+                tempDiff.textContent = "Introduzca valores válidos";
+                return;
+              }
+              
+              //Comprobamos que la maxima es igual o mayor que la minima
+              if (max<min){
+                tempMax.setCustomValidity("La temperatura máxima debe ser mayor o igual que la mínima");
+                tempDiff.textContent = "Error: Temperatura máxima inferior a la mínima";
+              }
+              else{
+                tempMax.setCustomValidity("");
+                const diff = (max - min).toFixed(1);
+                tempDiff.textContent = `${diff} °C`;
+              }
+            }
+            
+            tempMax.addEventListener('input', actualizarDiferencia);
+            tempMin.addEventListener('input', actualizarDiferencia);
+          </script>
+          
+</body>
+</html>
+          
+          
+          
