@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Room Project - Modificar Nombre</title>
+  <link rel="stylesheet" href="css/iroom.css">
+</head>
+<body>
+  <header>
+    <h1>Smart Room Project</h1>
+  </header>
+  
+  <main>
+    <section class="card">
+      <h2>Gestión de usuario</h2>
+      <p>Introduce tu nombre para personalizar la sesión en Smart Room:</p>
+      
+      <form id="name-form" style="margin-top: 15px;">
+        <p>
+          <label for="fname">Nombre de usuario:</label><br>
+          <input type="text" id="fname" name="fname" required placeholder="Escribe tu nombre">
+        </p>
+        
+        <p style="margin-top: 10px;">
+          <button type="submit">Guardar nombre</button>
+        </p>
+      </form>
+      
+      <p id="feedback-msg" style="margin-top: 15px; color: green; font-weight: bold;">
+      </p>
+    </section>
+    
+    <p style="margin-top: 20px;">
+      <a href="index.html">&larr; Volver a la página principal</a>
+    </p>
+  </main>
+  <footer>
+    <p>Universidad de Alcalá</p>
+  </footer>
+  
+  <script>
+    const form = document.getElementById('name-form');
+    const fnameInput = document.getElementById('fname');
+    const feedback = document.getElementById('feedback-msg');
+    
+    //En el caso de que al abrir la pagina ya hubiese un nombre generado se muestra directamente
+    const existingName = localStorage.getItem('fname');
+    if (existingName){
+      fnameInput.value = existingName;
+    }
+    
+    //Ahora al enviar el formulario, se guarda el valor fname en localStorage
+    form.addEventListener('submit', (e) => {
+      e.preventDefault(); //Evitamos recargar la página para procesarlo en localStorage
+      const nameValue = fnameInput.value.trim();
+      
+      if (nameValue) {
+        localStorage.setItem('fname', nameValue);
+        feedback.textContent = `¡Nombre "${nameValue}" guardado correctamente!`;
+      }
+    });
+  </script>
+
+</body>
+</html>
+          
+          
