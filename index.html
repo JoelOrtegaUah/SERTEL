@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="es"> <!-- Configuramos el idioma de la web para que se use el Español-->
 <head>
-  <meta charset=UTF-8"> <!--Permite utilizar la codificación UTF-8 para traducir caracteres de texto a numeros binarios-->
+  <meta charset="UTF-8"> <!--Permite utilizar la codificación UTF-8 para traducir caracteres de texto a numeros binarios-->
   <!--Configuracion de la ventana grafica-->
   <!--Adaptamos el ancho de la pagina al ancho del dispositivo y despues establecemos el nivel de zoom al 100% por defecto-->
-  <meta name="viewport" content="width-device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!--Metadato de descripcion-->
   <!--Proporcionamos un breve resumen del contenido del sitio web-->
   <meta name="description" content="Diseño de una habitacion con sensores">
@@ -53,7 +53,7 @@
         <li><strong>Código Postal:</strong> 28801</li>
         <li>
           <strong>Ubicación:</strong>
-          <a href="https://www.google.com/?q=40.5081172,-3.3756315,14" target="_blank" rel="noopener noreferrer">
+          <a href="https://www.google.com/maps/place/Escuela+Polit%C3%A9cnica+Superior+-+UAH/@40.5081172,-3.3756315,14z/data=!4m10!1m2!2m1!1sUniversidad+de+Alcala+-+Summer!3m6!1s0xd424bfad3ecbbc1:0x667509a1add2eac7!8m2!3d40.5130335!4d-3.3487276!15sCh5Vbml2ZXJzaWRhZCBkZSBBbGNhbGEgLSBTdW1tZXJaHiIcdW5pdmVyc2lkYWQgZGUgYWxjYWxhIHN1bW1lcpIBCnVuaXZlcnNpdHmaASRDaGREU1VoTk1HOW5TMFZKUTBGblNVUmxhbG90YmpSQlJSQULgAQD6AQUIpAIQRQ!16s%2Fg%2F11b7q65hkr?entry=ttu&g_ep=EgoyMDI2MDkyMy4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer">
             Localización Google Maps
           </a>
         </li>
@@ -61,13 +61,13 @@
       
       <!-- Imagen de la habitación y texto alternativo adecuado-->
       <figure>
-        <img src="/home/jawel/iroom-dev/images/room.jpeg" alt="Vista de la habitación Smart Room">
+        <img src="images/room.jpeg" alt="Vista de la habitación Smart Room">
         <figcaption>Vista de la habitación inteligente</figcaption>
       </figure>
     </section>
     
     <!--Sección de los datos de los sensores-->
-    <section class="sersor-data">
+    <section class="sensor-data">
       <h2>Datos de los sensores</h2>
       <table>
         <thead>
@@ -89,9 +89,19 @@
             <td>Bajo</td>
           </tr>
           <tr>
+            <td>Nivel de sonido</td>
+            <td>42 dB</td>
+            <td>Bajo</td>
+          </tr>
+          <tr>
             <td>Nivel de luz</td>
             <td>320 lux</td>
             <td>Adecuado</td>
+          </tr>
+          <tr>
+            <td>Movimiento</td>
+            <td>No detectado</td>
+            <td>Inactivo</td>
           </tr>
         </tbody>
       </table>
@@ -101,7 +111,7 @@
   
   <!--Pie de pagina-->
   <footer>
-    <p>Universidad e Alcalá</p>
+    <p>Universidad de Alcalá</p>
   </footer>
   
   <!--Script para recuperar el nombre guardado en LocalStorage -->
@@ -109,7 +119,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       const savedName = localStorage.getItem('fname');
       if (savedName){
-        document.getElemetById('welcome-message').textContent = 'Hola ${savedName}: Bienvenido a Smart Room';
+        document.getElementById('welcome-message').textContent = `Hola ${savedName}: Bienvenido a Smart Room`;
       }
     });
   </script>
