@@ -3,66 +3,108 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Gestión y personalización de usuario en Smart Room">
   <title>Smart Room Project - Modificar Nombre</title>
   <link rel="stylesheet" href="css/iroom.css">
 </head>
+
 <body>
+  <!--Encabezado principal-->
   <header>
     <h1>Smart Room Project</h1>
   </header>
+
+  <!--Creamos el menu de navegacion-->
+  <div class="menu-container">
+    <nav>
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="config.html">Configuración</a></li>
+        <li><a href="minombre.html">Mi Perfil</a></li>
+      </ul>
+    </nav>
+    <!--Añadimos tambien el saludo al usuario con el id info-aside para cambiarlo luego con el script-->
+    <aside id="info-aside">Bienvenido, introduce tu nombre</aside>
+  </div>
   
   <main>
-    <section class="card">
-      <h2>Gestión de usuario</h2>
+    <!--Ahora en el main lo que vamos a crear es una seccion en la que se incluira un titulo, una explicacion y un formulario en la que el usuario introducirá su nombre-->
+    <!--Le añadimos la clase card para modificarlo posteriormente en el archivo de estilos-->
+    <section class="card" style="max-width: 600px; margin: 0 auto; width: 100%;">
+      <h2>Gestión de usuario</h2> <!--Titulo que aparecerá al principio-->
+      <!--Explicacion de lo que debe de hacer el usuario-->
       <p>Introduce tu nombre para personalizar la sesión en Smart Room:</p>
       
+      <!--Lo siguiente será crear el formulario con el id name-form-->
       <form id="name-form" style="margin-top: 15px;">
+        <!--Encima de la casilla donde irá el nombre pondremos nombre de usuario-->
         <p>
+          <!--Creamos un label para identificarlo luego con el nombre introducido-->
           <label for="fname">Nombre de usuario:</label><br>
+          <!--El input será de tipo texto y le ponemos de id y de nombre el fname para reconocerlo en el script y guardar el nombre en localstorage bajo el id fname-->
           <input type="text" id="fname" name="fname" required placeholder="Escribe tu nombre">
         </p>
         
-        <p style="margin-top: 10px;">
-          <button type="submit">Guardar nombre</button>
+        <!--Ahora creamos el boton de enviar y modificamos su interior para que aparazca guardar nombre-->
+        <p style="margin-top: 15px;">
+          <button type="submit" id="btn-submit">Guardar nombre</button>
         </p>
       </form>
       
-      <p id="feedback-msg" style="margin-top: 15px; color: green; font-weight: bold;">
+      <!--Esto aparecerá cuando el usuario introduzca su nombre indicandole si todo ha ido bien o no, se realiza mediante un script-->
+      <p id="feedback-msg" style="margin-top: 15px; font-weight: bold;"></p>
+      
+      <!--Le dejamos al usuario una opcion para poder volver a la pagina principal una vez haya guardado el nombre-->
+      <p style="margin-top: 20px;">
+        <!--Lo enlazamos con la url de la pagina principal y le añadimos un color rojo y le añadimos la linea por pura estetica. Ademas le decimos que ponga volver a la pagina principal-->
+        <a href="index.html" style="color: #b91c1c; text-decoration: underline;">Volver a la página principal</a>
       </p>
     </section>
-    
-    <p style="margin-top: 20px;">
-      <a href="index.html">&larr; Volver a la página principal</a>
-    </p>
   </main>
+
   <footer>
     <p>Universidad de Alcalá</p>
   </footer>
   
+  <!--Siguiendo por los scripts, en este caso tendremos 2, uno para guardar el nombre y mostrarlo y otro para mostrar el mensaje de feedback-->
   <script>
+    //"Definimos" las variables y las guardamos para hacer uso de ellas
+    //Definimos form para que apunte al formulario 
     const form = document.getElementById('name-form');
+    //Definimos fnameInput para guardar el dato que ha introducido el usuario (el nombre de usuario)
     const fnameInput = document.getElementById('fname');
+    //Definimos feedback para posteriormente mostrar el mensaje dependiendo del resultado del formulario
     const feedback = document.getElementById('feedback-msg');
+    //Definimos aside para que apunte exactamente al texto que modificaremos cuando el usuario introduzca el nombre
+    const aside = document.getElementById('info-aside');
     
-    //En el caso de que al abrir la pagina ya hubiese un nombre generado se muestra directamente
-    const existingName = localStorage.getItem('fname');
-    if (existingName){
-      fnameInput.value = existingName;
+    //Al abrir la página, si ya existe un nombre en localStorage lo mostramos
+    const savedName = localStorage.getItem('fname');
+    if (savedName) {
+      fnameInput.value = savedName;
+      aside.textContent = `Usuario actual: ${savedName}`;
     }
     
-    //Ahora al enviar el formulario, se guarda el valor fname en localStorage
+    // En el caso de que no exista un nombre guardado en LocalStorage o se actualice modificaremos el mensaje y le mostraremos el mensaje de feedback
+    //1º interceptamos el envio del formulario para procesar sin tener que recargar la pagina
     form.addEventListener('submit', (e) => {
-      e.preventDefault(); //Evitamos recargar la página para procesarlo en localStorage
+      e.preventDefault(); //Evita la recarga de la pagina al hacer click en el boton de enviar
+
+      //Guardamos en nameValue el texto introducido por el usuario y le borramos los espacios al inicio y al final
       const nameValue = fnameInput.value.trim();
       
+      //Si lo guardamos bien y todo sale correcto guardamos con setItem en localStorage con el id fname y el valor del texto introducido por el usuario
       if (nameValue) {
         localStorage.setItem('fname', nameValue);
+        //Despues definimos el estilo del mensaje de feedback
+        feedback.style.color = "#2ECC71";
+        //Modificamos el mensaje de feedback para mostrar que se guardó correctamente
         feedback.textContent = `¡Nombre "${nameValue}" guardado correctamente!`;
+        //Modificamos el mensaje para que salga el nombre del usuario
+        aside.textContent = `Usuario actual: ${nameValue}`;
       }
     });
   </script>
-
 </body>
 </html>
-          
           

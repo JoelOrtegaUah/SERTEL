@@ -1,87 +1,107 @@
 <!DOCTYPE html>
 <html lang="es"> <!-- Configuramos el idioma de la web para que se use el Español-->
 <head>
-  <meta charset="UTF-8"> <!--Permite utilizar la codificación UTF-8 para traducir caracteres de texto a numeros binarios-->
+  <meta charset="UTF-8"> <!--Permite utilizar la codificación UTF-8 para soportar tildes y caracteres especiales -->
   <!--Configuracion de la ventana grafica-->
-  <!--Adaptamos el ancho de la pagina al ancho del dispositivo y despues establecemos el nivel de zoom al 100% por defecto-->
+  <!--Con viewport adaptamos el ancho de la pagina al ancho del dispositivo y despues establecemos el nivel de zoom al 100% por defecto-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!--Metadato de descripcion-->
   <!--Proporcionamos un breve resumen del contenido del sitio web-->
   <meta name="description" content="Diseño de una habitacion con sensores">
   <!--Titulo del documento-->
-  <title>Smart Room Project </title>
+  <title>Smart Room Project</title>
   <!--Enlace a la hoja de estilos externa-->
   <!--Conectamos este archivo HTML con el archivo de estilos CSS de css/iroom.css-->
+  <!--Con el ?v=2 evitamos problemas de caché-->
   <link rel="stylesheet" href="css/iroom.css">
 </head>
+
 <body>
   <!--Encabezado principal con el estilo h1 -->
   <header>
     <h1>Smart Room Project</h1>
   </header>
   
-  <!--Menu de navegacion-->
+  <!--Contenedor superior para el menú y la información de bienvenida-->
   <div class="menu-container">
     <!--Definimos atributo aria-label para que se sepa de que menu estamos hablando-->
     <nav aria-label="Menu principal">
       <!--Lista no ordenada-->
       <ul>
         <!--Elementos de la lista con li y enlaces con a-->
-        <li><a href="index.html">Inicio</a></li>
-        <li><a href="config.html">Configuración</a></li>
-        <li><a href="minombre.html">Nombre</a></li>
+        <li><a href="index.html">Inicio</a></li>  <!--Nos llevará directo a la web de index.html-->
+        <li><a href="config.html">Configuración</a></li> <!--Nos llevará a la web config.html-->
+        <li><a href="minombre.html">Mi Perfil</a></li> <!--Nos llevará a la web minombre.html-->
       </ul>
     </nav>
     
-    <!---->
+    <!--Ahora creamos el saludo que se personalizará con el nombre del usuario mediante un script de JavaScript-->
     <!--Con aside representamos el contenido relacionado de forma secundaria con el contenido principal-->
+    <!--Indicamos  los motores de búsqueda y a los lectores de pantalla que esta informacion no forma parte del flujo principal-->
+    <!--En el caso de que falle esta linea o se elimine, la pagina debe seguir funcionando ya que es un complemento de la web-->
     <aside id="info-aside">
-      <!--span se usa para agrupar texto o partes pequeñas de contenido sin crear un salto de linea-->
-      <!--Le aplicamos el atributo para encontrarlo mas adelante de una forma muy sencilla-->
+      <!--Creamos un span con aside para poder manipular el contenido con script mas adelante-->
+      <!--El script localiza esta parte del codigo, en concreto donde pone invitado, y lo modifica por el nombre del usuario que habra introducido mas adelante-->
+      <!--Con span le agregamos el identificador welcome-message para poder acceder a él desde el script-->
       <span id="welcome-message">Hola invitado: Bienvenido a Smart Room</span>
     </aside>
   </div>
   
+  <!--Ahora escribiremos la estructura principal de la página-->
   <main>
-  <!-- Primera seccion para los datos de la habitacion-->
+  <!--Primera seccion para los datos de la habitacion-->
+    <!--Creamos una seccion para los datos de la habitacion y le aplicamos la clase room-data para aplicarle el estilo en la hoja de estilos-->
     <section class="room-data">
-      <h2>Datos de la habitación</h2>
+      <h2>Datos de la habitación</h2> <!--Titulo de la sección-->
       <ul>
+        <!--Lista de los datos de la habitación con strong en los apartados importantes-->
         <li><strong>Sala:</strong> Habitación de invitados</li>
         <li><strong>País:</strong> España</li>
         <li><strong>Ciudad:</strong> Alcalá de Henares</li>
         <li><strong>Código Postal:</strong> 28801</li>
         <li>
           <strong>Ubicación:</strong>
+          <!--Indicamos que es un enlace con href y con target="_blank" forzamos al navegador a abrirlo en una nueva pestaña-->
           <a href="https://www.google.com/maps/place/Escuela+Polit%C3%A9cnica+Superior+-+UAH/@40.5081172,-3.3756315,14z/data=!4m10!1m2!2m1!1sUniversidad+de+Alcala+-+Summer!3m6!1s0xd424bfad3ecbbc1:0x667509a1add2eac7!8m2!3d40.5130335!4d-3.3487276!15sCh5Vbml2ZXJzaWRhZCBkZSBBbGNhbGEgLSBTdW1tZXJaHiIcdW5pdmVyc2lkYWQgZGUgYWxjYWxhIHN1bW1lcpIBCnVuaXZlcnNpdHmaASRDaGREU1VoTk1HOW5TMFZKUTBGblNVUmxhbG90YmpSQlJSQULgAQD6AQUIpAIQRQ!16s%2Fg%2F11b7q65hkr?entry=ttu&g_ep=EgoyMDI2MDkyMy4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer">
             Localización Google Maps
           </a>
         </li>
       </ul>
       
-      <!-- Imagen de la habitación y texto alternativo adecuado-->
+      <!--Ahora implementamos la imagen de la habitación y texto alternativo adecuado-->
       <figure>
+        <!--Lo creamos con figure para indicar que es una imagen con una descripción asociada-->
         <img src="images/room.jpeg" alt="Vista de la habitación Smart Room">
+        <!--Le añadimos un figcaption para el pie de foto-->
         <figcaption>Vista de la habitación inteligente</figcaption>
       </figure>
     </section>
     
     <!--Sección de los datos de los sensores-->
+    <!--Ahora para los datos de los sensores volvemos a crear una seccion con la clase sensor-data para modificar el estilo en la hoja de estilos-->
     <section class="sensor-data">
-      <h2>Datos de los sensores</h2>
+      <h2>Datos de los sensores</h2>  <!--Titulo de la sección-->
+      <!--Creamos una tabla para mostrar los datos de los sensores en formato de tabla, por lo que los datos se muestran por filas y columnas-->
       <table>
+        <!--Con thead agrupamos las filas del encabezado-->
         <thead>
+          <!--tr define las filas en horizontal-->
           <tr>
+            <!--th define los encabezados de columna, por defecto muestra el texto en negrita y centrado-->
+            <!--scope=col se utiliza dentro de las cabeceras th para indicar que es el encabezado de toda la columna que tiene debajo-->
             <th scope="col">Sensor</th>
             <th scope="col">Lectura actual</th>
             <th scope="col">Estado</th>
           </tr>
         </thead>
+        <!---->
         <tbody>
+          <!--Definimos las filas de la tabla con tr-->
           <tr>
-            <td>Temperatura</td>
-            <td>21.5 ºC</td>
-            <td>Normal</td>
+            <!--td sirve para indiar que es un dato de la tabla(table data)-->
+            <td>Temperatura</td>  <!--1º fila 1º columna-->
+            <td>21.5 ºC</td>      <!--1º fila 2º columna-->
+            <td>Normal</td>       <!--1º fila 3º columna-->
           </tr>
           <tr>
             <td>Humedad</td>
@@ -114,10 +134,13 @@
     <p>Universidad de Alcalá</p>
   </footer>
   
-  <!--Script para recuperar el nombre guardado en LocalStorage -->
+  <!--Script para recuperar el nombre guardado en LocalStorage-->
   <script>
+    //En primer lugar esperamos a que el contenido del DOM (Document Object Model, interfaz de programación del documento) esté completamente cargado
     document.addEventListener('DOMContentLoaded', () => {
+      //Leemos el nombre guardado en LocalStorage con la clave fname que es donde se encontrará el nombre del usuario.
       const savedName = localStorage.getItem('fname');
+      //Si ya existe un nombre guardado actualizamos el mensaje de bienvenida con el nombre del usuario, en caso contrario se mantendrá el mensaje por defecto.
       if (savedName){
         document.getElementById('welcome-message').textContent = `Hola ${savedName}: Bienvenido a Smart Room`;
       }

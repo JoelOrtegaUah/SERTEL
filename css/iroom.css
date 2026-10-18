@@ -1,177 +1,273 @@
-/*Archivo para los estilos de las paginas de la webs*/
-/*Estilos generales y tipografía*/
-*{
+/*Este archivo es para todos los estilos de la web y tener el codigo lo mas limpio y accesible posible*/
+/*Lo primero sera configurar como el navegador calcula el tamaño total de los elementos html que haya en la web*/
+/*El * es para hacer la configuracion universal y se aplique a todos los elementos de la web, en este caso a todos los modelos de caja estandar*/
+/*Al poner el * y el margin y padding a 0 lo que estamos haciendo es la tecnica CSS Reset pque sirve para eliminar los estilos por defecto de los navegadores y para controlar totalmente el diseño*/
+* {
   box-sizing: border-box;
+  /**/
   margin: 0;
   padding: 0;
 }
 
+/*Body en la hoja de estilos sirve para definir el fondo general, la tipografia y los margenes por defecto*/
 body {
+  /*Tipografía general*/
   font-family: Arial, Helvetica, sans-serif;
+  /*line-height es para indicar el espaciado entre las lineas de texto*/
   line-height: 1.6;
-  color: #333333;
-  background-color: #f4f6f9;
+  /*Indica el color principal del texto de la web*/
+  color: #111111;     
+  /*Color del fondo de la web por defecto*/         
+  background-color: #f8f8f8;
+  /*padding sirve para generar espacio entre entre el contenido de un elemento y su propio borde*/   
   padding: 20px;
 }
 
-/*Cabecera y titulo centrado*/
-header{
-  background-color: #003366;
-  color: #ffffff;
+/*Estilo para la cabecera y título principal, en este caso Smart Room Project*/
+header {
+  /*Color de fondo roja*/
+  background-color: #b91c1c;
+  /*Color de las letras*/
+  color: #ffffff;     
+  /*Margenes de la cabecera con el final del elemento*/        
   padding: 20px;
+  /*Texto centrado*/
   text-align: center;
+  /*Sirve para redondear las esquinas del borde del elemento*/
   border-radius: 6px;
+  /*Margen por debajo del elemento*/
   margin-bottom: 15px;
 }
 
-header h1{
+/*Con esto modificaremos los titulos h1 que esten detro de header para que solo se modifiquen los que nosotros queremos que se vean de la forma que hemos configurado antes*/
+/*En este caso solo tenemos en header y con h1 a los titulos de Smart Room Project por lo que solo se verá afectado este titulo segun las especificaciones anteriores*/
+header h1 {
+  /*Ademas le decimos que haga el tamaño del texto de 2rem. Rem es la medida recomendada por si el usuario decide cambiar el tamaño de la letra en su navegador*/
   font-size: 2rem;
+  /*Esto es para indicar que queremos que la letra del texto sea mas gorda de lo normal*/
   font-weight: bold;
 }
 
-/*Menu de navegacion y region lateral*/
-.menu-container{
+/*Ahora configuraremos el menu de navegacion que usamos en las tres paginas con la clase menu-container*/
+.menu-container {
+  /*De esta forma colocaremos los elementos en fila facilmente, para que quede esteticamente las opciones de Inicio, configuracion y nombre*/
   display: flex;
+  /*Con space-between indicamos que queremos los elementos distribuidos uniformemente empezando por la izquierda con el primer elemento siguiendo hacia la derecha hasta el ultimo*/
   justify-content: space-between;
+  /*Centramos los items en el centro del contenedor para que quede justo en el medio, con el mismo margen arriba y abajo*/
   align-items: center;
-  background-color: #e2e8f0;
+  /*Color de fondo*/
+  background-color: #111111;
+  /*Esto creará un margen entre los diferentes elementos de la pagina de 10px vertical y 15px horizontal */ 
   padding: 10px 15px;
+  /*Redondeamos los bordes del contenedor*/
   border-radius: 6px;
+  /*Margen por debajo del contendor*/
   margin-bottom: 20px;
 }
 
-nav ul{
+/*Seguimos con la configuracion de la listas desordenadas que haya en el codigo*/
+nav ul {
+  /*No le atribuimos ningun estilo como puntos, guiones etc*/
   list-style: none;
+  /*Colocamos los elementos uno encima de otro ya que el unico hijo de nav es ul por lo que este se comporta como un elemento flexible pero los elementos de li si*/
   display: flex;
+  /*Espacio entre los elementos de la lista*/
   gap: 15px;
 }
 
-nav a{
+/*Esta configuracion es para el menu de navegacion de Inicio, Configuracion y nombre*/
+nav a {
+  /*Descartamos el subrayado azul que le ponen los navegadores por defecto*/
   text-decoration: none;
-  color: #003366;
+  /*Le ponemos color blanco al texto ya que el fondo es negro*/
+  color: #ffffff; 
+  /*Letra gorda*/ 
   font-weight: bold;
-  padding: 5px 10px;
+  /*Espaciado para el boton de 6px vertical y 12 px horizontal*/
+  padding: 6px 12px;
+  /*Redondeado del boton*/
   border-radius: 4px;
 }
 
-nav a:hover;
-nav a:focus;{
-  background-color: #cbd5e1;
-  outline: 2px solid #003366;
-}
-
-#info-aside{
+/*Estilo para el mensaje que aparece en el lateral del menu el cual es modificado por los scripts*/
+#info-aside {
+  /*Aplicamos tipografia cursiva*/ 
   font-style: italic;
-  color: #475569;
+  /*Color blanco pero con tono grisaceo*/
+  color: #e5e5e5;   
 }
 
-/*Dos columnas para index.html*/
-main{
+/*Aplicamos estilo a las dos columnas de index.html*/
+main {
+  /*Contenedor flexible*/
   display: flex;
-  flex-direction row;
-  gap: 20px;
+  /*Coloca los elementos en una linea horizontal (de esta forma habrá un contenedor al lado de otro)*/
+  flex-direction: row;
+  /*Distribuye los elementos empujando cada una en un extremo del contenedor*/
+  justify-content: space-between;
+  /*Separacion entre ambos elementos*/
+  gap: 50px;
+  /*Alineamos los elementos al borde superior*/
   align-items: flex-start;
+  /*Ocupamos la totalidad del ancho de la pagina*/
+  width: 100%;
 }
 
+/*Estilo para los elementos del main (datos de la habitacion, datos de los sensores)*/
+.room-data,
+.sensor-data,
+.card {
+  /*Permitimos que las columnas crezcan, encojan y se repartan el ancho al 50%*/
+  flex: 1 1 0;
+  /*Evitamos elementos anchos*/
+  min-width: 0;
+  /*Color de fondo*/
+  background-color: #ffffff;
+  /*Espacio interno para separar el texto de los bordes*/
+  padding: 20px;
+  /*Redondeamos el contenedor*/
+  border-radius: 6px;
+  /*Línea roja en el borde de arriba por estetica*/
+  border-top: 4px solid #b91c1c;
+}
+
+/*Estilo para los titulos de cada tarjeta*/
 .room-data h2,
 .sensor-data h2,
 .card h2 {
-  color: #003366;
-  border-bottom: 2px solid #003366;
+  /*Color del titulos*/
+  color: #111111; 
+  /*Linea roja para diferenciar el titulo de los datos*/ 
+  border-bottom: 2px solid #b91c1c;
+  /*Espacio interior entre el texto y la linea roja*/
   padding-bottom: 8px;
+  /*Margen exterior por debajo de la linea roja*/
   margin-bottom: 15px;
 }
 
+/*Estilo de la lista no ordenada de la seccion de la habitacion*/
 .room-data ul {
+  /*Evitamos puntos o guiones*/
   list-style: none;
+  /*Margen inferior para separarlo de la imagen*/
   margin-bottom: 15px;
 }
 
+/*Espacio de cada elemento de la lista*/
 .room-data li {
   margin-bottom: 8px;
 }
 
+/*Estilo del enlace de google maps*/
 .room-data a {
-  color: #0284c7;
+  color: #b91c1c;           
+  font-weight: bold;
   text-decoration: underline;
 }
 
-/*Imagen de la habitacion*/
+/*Estilo del contenedor de la imagen*/
 figure {
+  /*Centramos la foto y el texto descriptivo*/
   text-align: center;
+  /*margen para que no se junte con los elementos de la lista*/
   margin-top: 15px;
 }
 
-figure img{
+/*Comportamiento de la foto*/
+figure img {
+  /*Evitamos que la imagen se desborde en las pantallas pequeñas*/
   max-width: 100%;
+  /*Relacion original para no deformar la imagen*/
   height: auto;
+  /*Redondeamos las esquinas*/
   border-radius: 4px;
-  border: 1px solid #cbd5e1;
+  /*Ponemos un borde negro*/
+  border: 2px solid #111111;
 }
 
+/*Pie de foto de la imagen*/
 figcaption {
+  /*Tamaño de la fuente*/
   font-size: 0.85rem;
-  color: #64748b;
+  color: #555555;
   margin-top: 5px;
 }
 
-/*Tabla de los sensores*/
+/*Estructura de la base de los sensores*/
 table {
+  /*Ocupamos todo el ancho posible de la columna*/
   width: 100%;
+  /*Introducimos una linea divisoria entre los elementos de la tabla*/
   border-collapse: collapse;
   margin-top: 10px;
 }
 
-th, td{
+/*Formato para los encabezados de la tabla y de los datos*/
+th, td {
+  /*Relleno interno v h*/
   padding: 10px 12px;
+  /*Pegamos el texto a la izquierda*/
   text-align: left;
-  border-bottom: 1px solid #e2e8f0;
 }
 
-th{
-  background-color: #f1f5f9;
-  color: #1e293b;
+/*Estilo para solo los encabezados de la tabla*/
+th {
+  /*Color negro de fondo*/
+  background-color: #111111;
+  /*Color de las letras*/
+  color: #ffffff;              
   font-weight: bold;
 }
 
-/*Formulario de configuración*/
-.form-container{
+/*Estilo para el formulario de la configuracion*/
+.form-container {
+  /*Contenedor flexible*/
   display: flex;
-  gap: 20px;
+  /*Separacion entre las dos columnas*/
+  gap: 50px;
+  /*Ocupamos todo el ancho disponible*/
+  width: 100%;
+  /*Alineamos arriba*/
+  align-items: flex-start;
+}
+
+/*Borramos la linea que sale por defecto en los fieldsets*/
+fieldset.card{
+  border: none;
+  border-top: 4px solid #b91c1c;
+  display: block;
+}
+
+/*Ocupamos todo el ancho horizontal*/
+fieldset.card legend{
   width: 100%;
 }
 
-.form-column{
-  flex: 1;
-  border: 1px solid #cbd5e1;
-  padding: 15px;
-  border-radius: 6px;
-  background-color: #ffffff;
-}
 
-.form-column legend h2{
-  border-bottom: none;
-  margin-bottom: 0;
-}
-
-/*Pie de página*/
-footer{
+/*Estilo del pie de pagina*/
+footer {
+  /*Alineamos al centro*/
   text-align: center;
   margin-top: 25px;
   padding: 15px;
-  color: #64748b;
-  border-top: 1px solid #cbd5e1;
+  color: #555555;
+  /*Linea separatoria*/
+  border-top: 2px solid #111111; 
+  /*Tamaño de la letra*/
   font-size: 0.9rem;
 }
 
 /*Diseño para pantallas móviles*/
-@media (max-width: 768px){
+@media (max-width: 768px) {
+  /*Convertimos la distribucion horizontal de dos columnas en una sola vertical*/
   main,
-  .form-container{
+  .form-container {
     flex-direction: column;
   }
   
-  .menu-container{
+  /*Apila los elementos de la barra de navegacion verticalmente*/
+  .menu-container {
     flex-direction: column;
     gap: 10px;
     text-align: center;
