@@ -295,7 +295,7 @@ footer {
 /*Caja blanca central de la ventana modal*/
 .modal-box{
   background-color: #ffffff; /*Fondo blanco*/
-  padding: 25px, 30px; /*Relleno interno de 25ps de alto y bajo y 30px de los lados*/
+  padding: 25px 30px; /*Relleno interno de 25ps de alto y bajo y 30px de los lados*/
   border-radius: 8px; /*Redondeo de las esquinas del cuadro*/
   max-width: 420px; /*Le asignamos ancho maximo para que no se extienda en pantallas grandes*/;
   width: 90%; /*Ancho para ajustarse a pantallas moviles*/
