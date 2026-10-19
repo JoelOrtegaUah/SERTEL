@@ -94,11 +94,34 @@
             <label for="photo">Foto:</label><br>
             <input type="file" id="photo" name="photo" accept="image/*" required>
           </p>
-          
-          <!--En este caso, el type es una contraseña por lo que no se muestra el texto introducido-->
+
+          <!----PRACTICA2 2----->
+
+          <!--Parrafo para el nuevo campo de temperatura actual-->
           <p>
+            <!--Etiqueta vinculada al identificador del campo de temperatura actual-->
+            <label for="current-temp">Temperatura actual (ºC):</label><br>
+            <!--Campo de entrada numerico con pasos decimales y marcado como obligatorio-->
+            <input type="number" id="current-temp" name="current_temp" step="0.1" placeholder="Ej: 24.5" required>
+          </p>
+          
+          <!--Parrafo para la contraseña con el indicador de longitud-->
+          <p>
+            <!--Etiqueta vinculada al campo de contraseña-->
             <label for="password">Contraseña:</label><br>
+            <!--Campo de entrada protegido por ser una contraseña-->
             <input type="password" id="password" name="password" required>
+
+            <!--Contenedor general para el indicador de la contraseña-->
+            <div class="password-indicator-container">
+              <!--Añadimos el texto orientativo que indica la longitud actual y su evaluacion-->
+              <span id="pwd-feedback-text">Evaluación de longitud: 0 caracteres</span>
+              <!--Contenedor que sirve de base gris para la barra de progreso-->
+              <div class="password-meter-bar">
+                <!--Barra interna coloreada cuyo ancho y color varian segun el script-->
+                <div id="pwd-meter-fill" class="password-meter-progress"></div>
+              </div>
+            </div>
           </p>
           
           <!--Por ultimo creamos el botón de envío del formulario-->
@@ -227,7 +250,206 @@
     //Por ultimo añadimos los event listener a los inputs de la temperatura máxima y mínima para que cada vez que el usuario cambie el valor se actualice la diferencia en tiempo real
     tempMax.addEventListener('input', actualizarDiferencia);
     tempMin.addEventListener('input', actualizarDiferencia);
+
+    //----PRACTICA 2----
+    //Lo primero es definir los elementos que vamos a usar en las funciones
+
+    //Lista oficial de los paises permitidos como entrada del usuario
+    const validCountries = ["España", "Francia", "Portugal", "Italia", "Alemania"];
+
+    //Contenedor general oscuro de la ventana modal
+    const modal = document.getElementById('custom-modal');
+
+    //Elemento h3 del titulo de la ventana modal
+    const modalTitle = document.getElementById('modal-tittle');
+
+    //Parrafo donde se escriben los mensajes de la ventana modal
+    const modalMessage = document.getElementById('modal-message');
+
+    //Boton de aceptar de la ventana modal
+    const modalAceptBtn = document.getElementById('modal-accept-btn');
+
+    //Variable para almacenar una accion opcional a ejecutar cuando el usuario pulsa aceptar
+    let modalCallback = null;
+
+    //Funcion para desplegar la ventana modal cuado se necesite
+    function mostrarModal(titulo, mensaje, onAccept = null){
+      //Asignamos el texto  del titulo recibido por parametro
+      modalTitle.textContent = titulo;
+      //Asignamos el mensaje de errores recibidos por parametro
+      modalMessage.textContent = mensaje;
+      //Guardamos la funcion callback si se necesita realizar una accion al aceptar
+      modalCallback = onAccept;
+      //Mostramos la ventana modal aplicando flexbox para centrarla
+      modal.style.display = 'flex';
+    }
+
+    //Creamos un escuchador apuntando al boton de aceptar dentro de la ventana modal
+    modalAcceptBtn.addEventListener('click', () => {
+      //Cuando el usuario pulsa el boton, ocultamos la ventana modal
+      modal.style.display = 'none';
+      //Verificamos si se habia programado una accion al aceptar
+      if (typeof modalCallback === 'function') {
+        //Almacenamos temporalmente la accion a ejecutar
+        const action = modalCallback;
+        //Limpiamos la variable para futuras llamadas
+        modalCallback = null;
+        //Ejecutamos la accion
+        action();
+      }
+    });
+
+    //Ahora vamos a diseñar el indicador orientativo de la longitud de la contraseña
+    //Primero obtenemos la referencia del campo de entrada de la contraseña
+    const pwdInput = document.getElementById('password');
+
+    //Obtenemos el texto informativo donde se muestra la longitud
+    const pwdText = document.getElementById('pwd-feedback-text');
+
+    //Obtenemos la barra interna de color
+    const pwdFill = document.getElementById('pwd-meter-fill');
+
+    //Creamos un escuchador en el evento input para actualizar el medidor en tiempo real segun el usuario va tecleando
+    pwdInput.addEventListener('input', () => {
+      //Calculamos la cantidad de caracteres introducidos en ese movimiento
+      const len = pwdInput.value.lenght;
+      //Variable en el que guardamos el estado en el que se encuentra el usuario
+      let estado = "";
+      //Color por defecto en rojo
+      let color = "#ef4444";
+      //Ancho por defecto de la barra al inicio
+      let ancho = "0%";
+      
+      //Ahora realizamos las comprobaciones para poder cambiar el estado y el texto que indica en que punto se encuentra el usuario
+      //Comprobamos si el campo esta completamente vacio
+      if (len === 0){
+        ancho = "0%"; //Barra de longitud al 0%
+        estado = "0 caracteres"; //Texto o estado
+      }
+      else if (len < 6){
+        ancho = "30%"; //Menos de 6 caracteres = longitud baja
+        color = "#ef4444" //Color rojo para advertir
+        estado = "Demasiado débil (<6 caracteres)"; //Texto o estado
+      }
+      else if (len < 9){
+        ancho = "65%"; //Entre 6 y 8 caracteres = logitud mediante
+        color = "#f59e0b" //Color naranja para advertir de que aun no es valida
+        estado = "Débil (<9 caracteres)";
+      }
+      else{
+        ancho = "100%"; //9 caracteres o mas = longitud permitida
+        color = "#10b981" //Color verde para indicar que ya es valida
+        estado = "Adecuada (>9 caracteres)";
+      }
+
+      //Aplicamos el nuevo ancho de la barra de color
+      pwdFill.style.width = ancho;
+      //Aplicamos el nuevo color de la barra
+      pwdFill.style.backgroundColor = color;
+      //Actualizamos el mensaje indicando el estado de la comprobaciones
+      pwdText.textContent = `Comprobación de longitud: ${len} car. (${estado})`;
+    });
+
+      //Ahora pasamos a la validacion del formulario y el control de errores y advertencias
+      //Primero obtenemos las referencia del formulario
+      const formConfig = getElementById('config-form');
+
+      //Interceptamos el evento de envío del formulario
+      formConfig.addEventListener('submit', (e) => {
+        //Detenemos el envío automático del navegador para realizar la comprobación manual
+        e.preventDefault();
+
+        //Creamos un array donde acumularemos los textos de los errores bloqueantes
+        const errores = [];
+        //Variable para guardar el mensaje de advertencia térmica si ocurre
+        let advertenciaTemp = null;
+        
+        //---Comprobacion: Campo Country---
+
+        //Obtenemos la referencia al campo país
+        const countryInput = document.getElementById('country');
+        //Eliminamos espacios a los extremos y convertimos a minúsculas para comparar
+        const countryVal = countryInput.value.trim().toLowerCase();
+
+       //Comprobamos si el campo ha quedado vacío
+        if (!countryVal) {
+          //Añadimos el error correspondiente al array
+          errores.push("Error: El campo país no puede estar vacío.");
+        } 
+        //Comprobamos que, como no esta vacio, coincide con los permitidos
+        else{
+          const coincide = validCountries.some(pais => pais.toLowerCase() === countryVal);
+          // Si no se encuentra en la lista, agregamos el error de país erróneo
+          if (!coincide) {
+            errores.push("• País erróneo: Debe ser uno de los países admitidos.");
+          }
+        }
+        
+        //---Comprobacion de la contraseña---
+
+        if (pwdInput.value.lenght < 9){
+          errores.push("Error: La contraseña debe tener al menos 9 caracteres");
+        }
+        
+        //---Comprobacion de la temperatura actual---
+
+        //Obtenemos la referencia al campo de temperatura actual
+        const curTempInput = document.getElementById('current-temp');
+        //Convertimos el valor introducido a formato numérico con decimales
+        const curTempVal = parseFloat(curTempInput.value);
+
+       //Comprobamos si el campo está vacío o no es un número válido
+       if (curTempInput.value.trim() === "" || isNaN(curTempVal)) {
+          errores.push("Error: Debe introducir una temperatura actual numérica válida.");
+       } 
+       else if (curTempVal < 22 || curTempVal > 26) {
+         //Si el valor numérico queda fuera del rango [22, 26], generamos advertencia no bloqueante
+         advertenciaTemp = `Aviso: La temperatura actual (${curTempVal} °C) está fuera del intervalo inclusivo de 22 a 26 °C.`;
+       }
+
+       // --- Gestión de resultados en una ÚNICA ventana modal ---
+        //Verificamos si existen errores bloqueantes acumulados
+        if (errores.length > 0) {
+          //Mostramos todos los errores juntos separados por un salto de línea en una única ventana
+          mostrarModal("Datos incorrectos", errores.join("\n"));
+          //Detenemos la ejecución sin enviar los datos
+          return;
+        }
+
+       //Si no hay errores pero existe advertencia de temperatura fuera de rango
+        if (advertenciaTemp) {
+          //Mostramos la advertencia pero permitimos continuar tras aceptar
+          mostrarModal("Advertencia", `${advertenciaTemp}\n\nEsta advertencia no impedirá registrar la lectura.`, () => {
+            //Acción al pulsar Aceptar: enviamos el formulario
+            formConfig.submit();
+          });
+        } 
+        
+        else {
+          //Caso de éxito total sin errores ni advertencias
+          mostrarModal("Registro correcto", "Todos los campos son válidos. Procesando datos...", () => {
+            //Enviamos el formulario
+            formConfig.submit();
+          });
+        }
+     });
+  
+
   </script>
+
+  <!-----PRACTICA 2 ----->
+  <!--Contenedor prncipal para oscurecer la pantalla de fondo cuando hay una ventana modal-->
+  <div id="custom-modal" class="modal-overlay">
+    <!--Cuadro blanco del dialogo centrado-->
+    <div class="modal-box">
+      <h3 id="modal-tittle">Aviso</h3>
+      <!--Parrafo donde el script insertará los mensajes de validacion-->
+      <p id="modal-message"></p>
+      <!--Boton para cerrar la ventana modal y continuar-->
+      <button type="button" id="modal-accept-btn">Aceptar</button>
+    </div>
+  </div>
+
 </body>
 </html>
           

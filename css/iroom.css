@@ -1,3 +1,4 @@
+/*-------PRACTICA 1-------*/
 /*Este archivo es para todos los estilos de la web y tener el codigo lo mas limpio y accesible posible*/
 /*Lo primero sera configurar como el navegador calcula el tamaño total de los elementos html que haya en la web*/
 /*El * es para hacer la configuracion universal y se aplique a todos los elementos de la web, en este caso a todos los modelos de caja estandar*/
@@ -272,4 +273,82 @@ footer {
     gap: 10px;
     text-align: center;
   }
+}
+
+/*-------PRACTICA 2-------*/
+/*Estilo para la ventana modal*/
+
+/*Fondo oscuro para la pantalla que hay detras de la ventana modal*/
+.modal-overlay{
+  display: none; /*Oculto hasta que se active el script de java*/
+  position: fixed; /*Fijo relativo a la ventana del navegador*/
+  top: 0; /*Alineado con el borde superior*/
+  left: 0;
+  width: 100%; /*Ocupamos todo el ancho del viewport*/
+  height: 100%; /*Ocupamos todo el alto del viewport*/
+  background-color: rgba(0, 0, 0, 0.6); /*Color negro con opacidad del 60%*/  
+  z-index: 1000; /*Capa superior alta para asegurarnos de que queda por encima del contenido*/
+  justify-content: center; /*Contenedor flexible para centrar la tarjeta de dialogo*/
+  align-items: center; /*Para que la ventana modal quede centrada verticalmente*/
+}
+
+/*Caja blanca central de la ventana modal*/
+.modal-box{
+  background-color: #ffffff; /*Fondo blanco*/
+  padding: 25px, 30px; /*Relleno interno de 25ps de alto y bajo y 30px de los lados*/
+  border-radius: 8px; /*Redondeo de las esquinas del cuadro*/
+  max-width: 420px; /*Le asignamos ancho maximo para que no se extienda en pantallas grandes*/;
+  width: 90%; /*Ancho para ajustarse a pantallas moviles*/
+  text-align: center; /*Centrado de los textos y botones*/
+}
+
+/*Titulo de la ventana modal*/
+.modal-box h3{
+  color: #b91c1c; /*Mantenemos el rojo que he usado en toda la practica*/
+  margin-bottom: 12px; /*Margen inferior para separarlo del mensaje*/
+}
+
+/*Mensaje explicativo o lista de errores de la ventana modal*/
+.modal-box p{
+  color: #333333;
+  font-size: 0.95rem; /*Tamaño de fuente*/
+  margin-bottom: 20px; /*Margen para que no se junte con el boton*/
+  white-space: pre-line; /*Permite que los saltos de linea (\n) generados en el script se muestren como lineas separadas*/
+}
+
+/*Boton de confirmacion o cierre de la ventana modal*/
+.modal-box button{
+  background-color: #b91c1c; /*Color rojo de siempre*/
+  color:#ffffff; /*Color de las letras*/
+  border: none; /*Eliminamos el borde por defecto*/
+  padding: 8px 24px; /*Espaciado interno*/
+  font-size: 1rem;
+  font-weight: bold; /*Texto en negrita*/
+  border-radius: 4px;
+  cursor: pointer; /*Cursor tipo puntero al pasar el raton*/
+}
+
+/*Contenedor del texto e indicador visual de la contraseña*/
+.password-indicator-container{
+  margin-top: 6px; /*Separacion superior respecto al campo input*/
+  font-size: 0.85rem; /*Texto informativo mas pequeño*/
+}
+
+/*Fondo gris de la barra de progreso*/
+.password-meter-bar{
+  height: 6px; /*Altura de la barra*/
+  width: 100%; /*Todo el ancho disponible*/
+  background-color: #e5e7eb; /*Color de fondo cuando esta vacia*/
+  border-radius: 3px;
+  margin-top: 4px; /*Margen con el texto indicador*/
+  overflow: hidden; /*Oculta cualquier desbordamiento interno*/
+  /*Si por ejemplo la contraseña es mas grande que la caja que hemos reservado, en vez de seguir escribiendo se oculta*/
+}
+
+/*Barra interna que se llena segun la longitud*/
+.password-meter-progress{
+  height: 100%; /*Ocupa todo el ancho disponible*/
+  width: 0%; /*Inicialmente a 0 ya que el usuario no habra escrito nada*/
+  background-color: #ef4444; /*Color inicial*/
+  transition: width 0.3s ease, background-color 0.3s ease; /*Animacion para cambiar el ancho o el color*/
 }
