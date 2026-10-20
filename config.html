@@ -88,6 +88,12 @@
           <p>
             <label for="map-url">Mapa (URL):</label><br>
             <input type="url" id="map-url" name="map_url" placeholder="https://maps.google.com/..." required>
+            <!--Creamos un contenedor dinamico para probar el enlace generado en una pestaña nueva-->
+            <small style="display: block; margin-top: 5px;">
+              <a id="gps-preview-link" href="#" target="_blank" rel="noopener noreferrer" style="color: #b91c1c; display: none; font-weight: bold; text-decoration: underline;">
+                Ver ubicación en Google Maps
+              </a>
+            </small>
           </p>
           <!--En este caso, el type es un archivo por lo que solo acepta archivos de imagen-->
           <p>
@@ -456,7 +462,101 @@
           });
         }
      });
+    
+    //-----Practica 2.2-----
+    //Creamos la funcion que recibe la cadena de coordenadas y lo devuelve en formato decimales
+    function procesarCoordenadasGPS(cadenaTexto){
+      //Eliminamos espacios sobrantes al inicio y al final
+      const entrada = cadenaTexto.trim();
+
+      //Comprobamos si el campo esta vacío
+      if (!entrada) return null;
+
+      //Caso 1: Formato en grados decimales (Ej: 40.5, -3.3 o 40.5 -3.3)
+      //Separamos por coma o por espacios 
+      const partesDecimales = entrada.split(/[,\s]+/).map(v => parseFloat(v));
+      //Comprobamos que los datos introducidos son correctos
+      if (partesDecimales.length === 2 && !isNaN(partesDecimales[0]) && !isNaN(partesDecimales[1])){
+        //Guardamos los datos en las variables
+        const lat = partesDecimales[0];
+        const lon = partesDecimales[1];
+        
+        //Validamos los rangos geograficos reales que van de -90 a 90 para latitud y -180 a 180 para longitud
+        if (lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180) {
+          //Devolvemos lat y lon
+          return {latitud: lat, longitud: lon};
+        }
+      }
+
+      //Caso 2: Formato Grados, Minutos y Segundos (EJ: N 40º 30' 45.00", O 3º 20' 54.00")
+      //Expresion para detectar Hemisferio (opcional), Grados, Minutos y Segundos
+      const patronGMS = /([NSEOWnseow]?)\s*(\d+(?:\.\d+)?)[°º\s]+(\d+(?:\.\d+)?)(?:['′\s]+)?(\d+(?:\.\d+)?)?(?:["″\s]*)?\s*([NSEOWnseow]?)/g;
   
+      const coincidencias = [...entrada.matchAll(patronGMS)];
+      //Ahora debemos encontrar exactamente las dos componentes latitud y longitud
+      if (coincidencias.length >= 2){
+        //Funcion para convertir cada bloque GMS en decimales
+        function gmsADecimal(bloque){
+          const hemisferio = (bloque[1] || bloque[5] || '').toUpperCase();
+          const grados = parseFloat(bloque[2]) || 0;
+          const minutos = parseFloat(bloque[3]) || 0;
+          const segundos = parseFloat(bloque[4]) || 0;
+
+          //Realizamos la conversion matematica
+          let decimal = grados + (minutos/60) + (segundos/3600)
+
+          //Si el hemisferio es Sur u Oeste, el valor debe ser negativo
+          if (hemisferio === 'S' || hemisferio === 'O' || hemisferio === 'W'){
+            decimal = -decimal;
+          }
+          return decimal;
+        }
+
+        const latDecimal = gmsADecimal(coincidencias[0]);
+        const lonDecimal = gmsADecimal(coincidencias[1]);
+
+        //Redondeamos a 5 decimales de precision
+        return{
+          latitud: parseFloat(latDecimal.toFixed(5)),
+          longitud: parseFloat(lonDecimal.toFixed(5))
+        };
+      }
+      //Si no encaja en nada null
+      return null;
+    }
+    
+    //Añadimos un escuchador de eventos que calcula la URL automaticamente al cambiar las coordenadas
+    const gpsInput = document.getElementById('gps');
+    const mapUrlInput = document.getElementById('map-url');
+    const gpsPreviewLink = document.getElementById('gps-preview-link');
+
+    function actualizarEnlaceGoogleMaps(){
+      //Guardamos las coordenadas convertidas previamente gracias a procesarCoordenadasGPS
+      const coordenadas = procesarCoordenadasGPS(gpsInput.value);
+
+      if (coordenadas){
+        //Necesitamos que tenga el formato https://maps.google.com/maps?q=+latitud,+longitud
+        const latStr = coordenadas.latitud >= 0 ? `+${coordenadas.latitud}` : `${coordenadas.latitud}`;
+        const lonStr = coordenadas.longitud >= 0 ? `+${coordenadas.longitud}` : `${coordenadas.longitud}`;
+        const urlMaps = `https://maps.google.com/maps?q=${latStr},${lonStr}`;
+
+        //Asignamos el enlace generado al campo de URL del formulario
+        mapUrlInput.value = urlMaps
+
+        //Mostramos el enlace directo para que el usuario pueda probarlo
+        gpsPreviewLink.href = urlMaps
+        gpsPreviewLink.textContent = `Abrir en google Maps (${latStr}, ${lonStr})`;
+        gpsPreviewLink.style.display = 'inline-block';
+      }
+      else{
+        //Si las coordenadas estan vacias o son erroneas, ocultamos el enlace directo
+        gpsPreviewLink.style.display = 'none';
+      }
+    }
+
+    //Escuchamos al teclear y al salir del campo
+    gpsInput.addEventListener('input', actualizarEnlaceGoogleMaps);
+    gpsInput.addEventListener('change', actualizarEnlaceGoogleMaps);
 
   </script>
 
