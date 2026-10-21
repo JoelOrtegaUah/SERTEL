@@ -352,3 +352,150 @@ footer {
   background-color: #ef4444; /*Color inicial*/
   transition: width 0.3s ease, background-color 0.3s ease; /*Animacion para cambiar el ancho o el color*/
 }
+
+/*APARTADO 4*/
+/*Contenedor principal para la calculadora*/
+.calc-container{
+  max-width: 420px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/*Pantalla de la calculadora*/
+.calc-screen{
+  background-color: #111111;
+  color: #ffffff;
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 15px;
+  text-align: right;
+}
+
+/*Indicador de escala en la pantalla*/
+.calc-unit-badge{
+  font-size: 0.9rem;
+  color: #f87171;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+/*Digitos del resultado*/
+.calc-display-digits{
+  font-size: 2.2rem;
+  font-family: monospace;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+/*Fila de botones de conversion de escala*/
+.scale-converter-group{
+  margin-bottom: 15px;
+}
+
+.scale-label{
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #555555;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.scale-buttons{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.scale-btn{
+  background-color: #111111;
+  color: #ffffff;
+  border: none;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.scale-btn:hover{
+  background-color: #b91c1c;
+}
+
+.scale-btn.active{
+  background-color: #b91c1c;
+}
+
+/*Botonera de la calculadora*/
+.calc-grid{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.calc-btn{
+  padding: 12px;
+  font-size: 1.2rem;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid #d1d5db;
+  transition: background-color 0.15 ease;
+}
+
+/*Botones numericos*/
+.calc-btn.btn-num{
+  background-color: #ffffff;
+  color: #111111;
+}
+
+.calc-btn.btn-num:hover{
+  background-color: #f3f4f6;
+}
+
+/*Operadores (+, -, *, /) */
+.calc-btn.btn-op{
+  background-color: #f3f4f6;
+  color: #111111;
+  font-weight: bold;
+}
+
+.calc-btn.btn-op:hover{
+  background-color: #e5e7eb;
+}
+
+/* Boton de borrar */
+.calc-btn.btn-clear{
+  grid-column: span 2;
+  background-color: #ef4444;
+  color: #ffffff;
+  font-weight: bold;
+  border-color: #ef4444;
+}
+
+.calc-btn.btn-clear:hover{
+  background-color: #dc2626;
+}
+
+/* Botón Igual (=) */
+.calc-btn.btn-equals {
+  grid-row: span 2;
+  background-color: #b91c1c;
+  color: #ffffff;
+  font-weight: bold;
+  border: none;
+  font-size: 1.3rem;
+}
+
+.calc-btn.btn-equals:hover {
+  background-color: #991b1b;
+}
+
+/* Cero que ocupa 2 columnas */
+.calc-btn.btn-zero {
+  grid-column: span 2;
+}
+
+/* Enlace de regreso */
+.back-link-container {
+  margin-top: 20px;
+  text-align: center;
+}

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Calculadora y conversor de temperaturas Smart Room">
+  <title>Smart Room Project - Calculadora de Temperaturas</title>
+  <link rel="stylesheet" href="css/iroom.css">
+</head>
+<body>
+
+  <!-- Encabezado -->
+  <header>
+    <h1>Smart Room Project</h1>
+  </header>
+
+  <!-- Menú de navegación -->
+  <div class="menu-container">
+    <nav aria-label="Menú principal">
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="config.html">Configuración</a></li>
+        <li><a href="minombre.html">Mi Perfil</a></li>
+        <li><a href="calculadora.html">Calculadora</a></li>
+      </ul>
+    </nav>
+    <aside id="info-aside">Calculadora de temperaturas</aside>
+  </div>
+
+  <main style="justify-content: ;">
+    <!-- Tarjeta de la calculadora usando las clases de iroom.css -->
+    <section class="card calc-container">
+      <h2>Calculadora de Temperaturas</h2>
+
+      <!-- Visor de la calculadora -->
+      <div class="calc-screen">
+        <div id="unit-badge" class="calc-unit-badge">
+          Escala actual: Grados Celsius (°C)
+        </div>
+        <div id="calc-display" class="calc-display-digits">0</div>
+      </div>
+
+      <!-- Conversor de escalas -->
+      <div class="scale-converter-group">
+        <label class="scale-label">Convertir valor a:</label>
+        <div class="scale-buttons">
+          <button type="button" id="btn-to-celsius" class="scale-btn active">A Celsius (°C)</button>
+          <button type="button" id="btn-to-kelvin" class="scale-btn">A Kelvin (K)</button>
+          <button type="button" id="btn-to-fahrenheit" class="scale-btn">A Fahrenheit (°F)</button>
+        </div>
+      </div>
+
+      <!-- Botonera -->
+      <div class="calc-grid">
+        <button type="button" class="calc-btn btn-clear" data-val="C">C</button>
+        <button type="button" class="calc-btn btn-op" data-val="/">÷</button>
+        <button type="button" class="calc-btn btn-op" data-val="*">×</button>
+
+        <button type="button" class="calc-btn btn-num" data-val="7">7</button>
+        <button type="button" class="calc-btn btn-num" data-val="8">8</button>
+        <button type="button" class="calc-btn btn-num" data-val="9">9</button>
+        <button type="button" class="calc-btn btn-op" data-val="-">−</button>
+
+        <button type="button" class="calc-btn btn-num" data-val="4">4</button>
+        <button type="button" class="calc-btn btn-num" data-val="5">5</button>
+        <button type="button" class="calc-btn btn-num" data-val="6">6</button>
+        <button type="button" class="calc-btn btn-op" data-val="+">+</button>
+
+        <button type="button" class="calc-btn btn-num" data-val="1">1</button>
+        <button type="button" class="calc-btn btn-num" data-val="2">2</button>
+        <button type="button" class="calc-btn btn-num" data-val="3">3</button>
+        <button type="button" class="calc-btn btn-equals" data-val="=">=</button>
+
+        <button type="button" class="calc-btn btn-num btn-zero" data-val="0">0</button>
+        <button type="button" class="calc-btn btn-num" data-val=".">.</button>
+      </div>
+
+      <p class="back-link-container">
+        <a href="index.html">Volver a la página principal</a>
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <p>Universidad de Alcalá</p>
+  </footer>
+
+  <!-- Lógica JavaScript -->
+  <script>
+    // Recuperar usuario de LocalStorage
+    const savedName = localStorage.getItem('fname');
+    if (savedName) {
+      document.getElementById('info-aside').textContent = `Usuario: ${savedName}`;
+    }
+
+    // Elementos del visor
+    const display = document.getElementById('calc-display');
+    const unitBadge = document.getElementById('unit-badge');
+    const btnC = document.getElementById('btn-to-celsius');
+    const btnK = document.getElementById('btn-to-kelvin');
+    const btnF = document.getElementById('btn-to-fahrenheit');
+
+    // Estado interno
+    let currentInput = "0";
+    let previousInput = null;
+    let currentOperation = null;
+    let resetOnNextInput = false;
+    let currentScale = "C";
+
+    const scaleLabels = {
+      C: "Grados Celsius (°C)",
+      K: "Kelvin (K)",
+      F: "Grados Fahrenheit (°F)"
+    };
+
+    function actualizarVisor() {
+      display.textContent = currentInput;
+      unitBadge.textContent = `Escala actual: ${scaleLabels[currentScale]}`;
+    }
+
+    // Botonera de dígitos y operaciones
+    const buttons = document.querySelectorAll('.calc-btn');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const val = btn.getAttribute('data-val');
+
+        if (val === 'C') {
+          currentInput = "0";
+          previousInput = null;
+          currentOperation = null;
+          resetOnNextInput = false;
+          actualizarVisor();
+          return;
+        }
+
+        if (['+', '-', '*', '/'].includes(val)) {
+          if (currentOperation !== null && !resetOnNextInput) {
+            calcularResultado();
+          }
+          previousInput = parseFloat(currentInput);
+          currentOperation = val;
+          resetOnNextInput = true;
+          return;
+        }
+
+        if (val === '=') {
+          if (currentOperation !== null && previousInput !== null) {
+            calcularResultado();
+            currentOperation = null;
+            previousInput = null;
+            resetOnNextInput = true;
+          }
+          return;
+        }
+
+        if (val === '.') {
+          if (resetOnNextInput) {
+            currentInput = "0.";
+            resetOnNextInput = false;
+          } else if (!currentInput.includes('.')) {
+            currentInput += '.';
+          }
+          actualizarVisor();
+          return;
+        }
+
+        if (resetOnNextInput || currentInput === "0") {
+          currentInput = val;
+          resetOnNextInput = false;
+        } else {
+          currentInput += val;
+        }
+        actualizarVisor();
+      });
+    });
+
+    function calcularResultado() {
+      const prev = previousInput;
+      const curr = parseFloat(currentInput);
+      let res = 0;
+
+      switch (currentOperation) {
+        case '+': res = prev + curr; break;
+        case '-': res = prev - curr; break;
+        case '*': res = prev * curr; break;
+        case '/': res = curr === 0 ? "Error" : prev / curr; break;
+        default: return;
+      }
+
+      if (res === "Error") {
+        currentInput = "Error";
+      } else {
+        currentInput = parseFloat(res.toFixed(4)).toString();
+      }
+      actualizarVisor();
+    }
+
+    // Conversión de escalas
+    function convertirEscala(nuevaEscala) {
+      if (currentInput === "Error") return;
+      if (currentScale === nuevaEscala) return;
+
+      let temp = parseFloat(currentInput);
+      if (isNaN(temp)) return;
+
+      // 1. Convertir la temperatura origen a Celsius
+      let tempCelsius;
+      if (currentScale === "C") tempCelsius = temp;
+      else if (currentScale === "K") tempCelsius = temp - 273.15;
+      else if (currentScale === "F") tempCelsius = (temp - 32) * (5 / 9);
+
+      // 2. De Celsius a la escala destino
+      let resFinal;
+      if (nuevaEscala === "C") resFinal = tempCelsius;
+      else if (nuevaEscala === "K") resFinal = tempCelsius + 273.15;
+      else if (nuevaEscala === "F") resFinal = (tempCelsius * (9 / 5)) + 32;
+
+      currentScale = nuevaEscala;
+      currentInput = parseFloat(resFinal.toFixed(2)).toString();
+      actualizarVisor();
+
+      // Actualizar clase activa en los botones
+      [btnC, btnK, btnF].forEach(b => b.classList.remove('active'));
+      if (nuevaEscala === "C") btnC.classList.add('active');
+      if (nuevaEscala === "K") btnK.classList.add('active');
+      if (nuevaEscala === "F") btnF.classList.add('active');
+    }
+
+    btnC.addEventListener('click', () => convertirEscala("C"));
+    btnK.addEventListener('click', () => convertirEscala("K"));
+    btnF.addEventListener('click', () => convertirEscala("F"));
+  </script>
+
+</body>
+</html>
