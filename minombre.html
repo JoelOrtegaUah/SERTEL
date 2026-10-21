@@ -44,11 +44,37 @@
           <!--El input será de tipo texto y le ponemos de id y de nombre el fname para reconocerlo en el script y guardar el nombre en localstorage bajo el id fname-->
           <input type="text" id="fname" name="fname" required placeholder="Escribe tu nombre">
         </p>
+
+        <!-- PRACTICA 2: APARTADO 3 -->
+        <!-- Campo para el correo electronico -->
+         <p>
+          <label for="email">Dirección de correo electrónico</label><br>
+          <input type="text" id="email" name="email" placeholder="ejemplo@dominio.uah.es" style="width: 100%; max-width: 320px; padding: 6px;">
+         </p>
         
         <!--Ahora creamos el boton de enviar y modificamos su interior para que aparazca guardar nombre-->
         <p style="margin-top: 15px;">
           <button type="submit" id="btn-submit">Guardar nombre</button>
         </p>
+
+        <!-- PRACTICA 2: APARTADO 3 -->
+        <!-- Configuramos los dos botones independientes que validaran la estructura del correo -->
+         <!-- Botona para la comprobacion de cadenas -->
+        <p style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
+          <button type="button" id="btn-val-cadenas" style="background-color: #000000; color: #ffffff; padding: 6px 12px; border-radius: 4px; cursor: pointer;">
+            Validar (cadenas)
+          </button>
+        </p>
+        <!-- Boton para la comprobacion de expresiones regulares -->
+        <p style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
+          <button type="button" id="btn-val-regex" style="background-color: #000000; color: #ffffff; padding: 6px 12px; border-radius: 4px; cursor: pointer;">
+            Validar (ExpReg)
+          </button>
+        </p>
+
+        <!-- Mensaje de confirmacion del email guardado -->
+        <p id="email-feedback-msg" style="margin-top: 15px; font-weight: bold;"></p>
+
       </form>
       
       <!--Esto aparecerá cuando el usuario introduzca su nombre indicandole si todo ha ido bien o no, se realiza mediante un script-->
@@ -104,6 +130,112 @@
         aside.textContent = `Usuario actual: ${nameValue}`;
       }
     });
+
+    // PRACTICA 2: APARTADO 3
+    // Script de la validacion del correo electronico
+    const emailInput = document.getElementById('email');
+    const emailFeedback = document.getElementById('email-feedback-msg');
+    const btnCadenas = document.getElementById('btn-val-cadenas');
+    const btnRegex = document.getElementById('btn-val-regex');
+
+    // Primera validacion: Validacion de cadenas
+    function validarEmailConCadenas(email){
+      //Primero eliminamos espacios del email recibido
+      const str = email.trim();
+
+      //Despues comprobamos que el email no esta vacio
+      if (str.length === 0 || str.includes(' ')){
+        return false;
+      }
+
+      //Ahora comprobamos que el email tiene un @
+      const primerArroba = str.indexOf('@');
+      const ultimoArroba = str.lastIndexOf('@');
+
+      //Si no hay un arroba o hay mas de uno es invalido
+      if (primerArroba === -1 || primerArroba !== ultimoArroba){
+        return false;
+      }
+
+      //Si llegamos a este punto todo esta bien por lo que Ahora
+      //Separamos la parte del usuario y la parte del dominio
+      const usuario = str.slice(0, primerArroba);
+      const dominio = str.slice(primerArroba + 1);
+
+      //Ahora comprobamos que ni la parte del usuario ni la parte del dominio esten vacias
+      if (usuario.length === 0 || dominio.length === 0){
+        return false;
+      }
+
+      //Ahora validamos la estructura del dominio
+      //El dominio no puede empezar ni terminar con un .
+      if (dominio.startsWith('.') || dominio.endsWith('.')){
+        return false;
+      }
+
+      //Ahora descomponemos el dominio para saber su subdominio separado por el .
+      const partesDominio = dominio.split('.');
+
+      //Tiene que haber al menos 2 partes para que sea validamos
+      if (partesDominio.length < 2){
+        return false
+      }
+
+      //Ahora, ninguna subparte del dominio debe estar vacia para evitar por ejemplo usuario@dominio..es
+      for (const parte of partesDominio){
+        if (parte.length === 0){
+          return false;
+        }
+      }
+
+      //Por ultimo el TLD final tiene que tener al menos 2 caracteres
+      const tld = partesDominio[partesDominio.length - 1]; //De esta forma cogemos siempre el ultimo elemento que es el tld
+      if (tld.length < 2){
+        return false;
+      }
+      
+      return true;
+    }
+
+      // Segunda validacion: Validacion mediante expresiones regulares
+      function validarEmailConRegex(email){
+        //Quitamos espacios al principio y al final
+        const str = email.trim();
+        //Creamos el patron 
+        const patronEmail = /^[^\s@]+@[^\s@.]+(\.[^\s@.]+)*\.[^\s@.]{2,}$/; 
+        // ^[^\s@]+         --> Parte del usuario con 1 o mas caracteres que no sean espacios ni @
+        // @                --> Caracter @ obligatorio
+        // [^\s@.]+         --> Primera parte del dominio
+        // (\.[^\s@.]+)*    --> Posibles subdominios
+        // \.[^\s@.]{2,}$/  --> Punto y TLD final con al menos 2 caracteres
+
+        return patronEmail.test(str);
+      }
+      
+      //Creamos la funcion para mostar el resultado de la comprobacion
+      function mostrarResultadoValidacion(esValido, metodo){
+        if (esValido){
+          emailFeedback.style.color = "#2ECC71" //Color verde para demostrar que es valido
+          emailFeedback.textContent = `[${metodo}] Dirección de correo válido.`;
+        }
+        else{
+          emailFeedback.style.color = "#b91c1c" //Color rojo para demostrar que no es valido
+          emailFeedback.textContent = `[${metodo}] Dirección de correo NO válido.`;
+        }
+      }
+      // Ahora actvamos los eventos para que se ejecuten las comprobaciones al pulsar los botones
+      //Evento para el boton de cadenas
+      btnCadenas.addEventListener('click', () => {
+        const valido = validarEmailConCadenas(emailInput.value);
+        mostrarResultadoValidacion(valido, "Cadenas");
+      });
+
+      //Evento para el boton btnRegex
+      btnRegex.addEventListener('click', () => {
+        const valido = validarEmailConRegex(emailInput.value);
+        mostrarResultadoValidacion(valido, "RegExp");
+      });
+    
   </script>
 </body>
 </html>
