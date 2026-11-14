@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!--Permitir caracteres especiales-->
+  <meta charset="UTF-8">
+  <!--viewport para ancho de pantalla de los dispositivos y ajustar el zoom por defecto al 100%-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--Metadato de la descripción de la página-->
+  <meta name="description" content="Galería de imagenes - Smart Room">
+  <!--Título de la página-->
+  <title>Smart Room Project - Galería</title>
+  <!--Enlazamos con la hoja de estilos-->
+  <link rel="stylesheet" href="css/iroom.css">
+
+  <!-- Cargamos la librería jQuery desde internet para poder usar sus funciones -->
+   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>Smart Room Project</h1>
+    </header>
+
+    <!--Menú de navegación y saludo de usuario con la clase menu-container para reconocerlo en la hoja de estilos-->
+    <div class="menu-container">
+        <!--Ayudamos al usuario a navegar por la página y a reconocer el menu de navegacion-->
+        <nav aria-label="Menu principal">
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="config.html">Configuración</a></li>
+            <li><a href="minombre.html">Mi Perfil</a></li>
+            <li><a href="calculadora.html">Calculadora</a></li>
+            <li><a href="galeria.html">Galería</a></li>
+        </ul>
+        </nav>
+        <!--Complemento para información adicional-->
+        <aside id="info-aside">Bienvenido a la configuración</aside>
+    </div>
+
+    <main style="justify-content: center;">
+        <section class="card" style="width: 100%; text-align: center;">
+            <h2>Entorno de las estaciones meteorológicas</h2>
+
+            <!-- Estructura HTML de la galería -->
+             <div class="gallery-wrapper">
+                <!-- Boton izquierda -->
+                <button type="button" class="nav-btn" id="btn-prev"></button>
+
+                <!-- Ventana visible -->
+                <div class="gallery-viewport">
+                    <!-- Tira de imagenes -->
+                    <div class="gallery-track" id="tracl">
+                        <img source="images/soleado.jpg" alt="Estacion 1: soleado" data-title="Imagen ejemplo tiempo soleado">
+                        <img source="images/nublado.jpg" alt="Estacion 2: nublado" data-title="Imagen ejemplo tiempo nublado">
+                        <img source="images/lluvia.jpg" alt="Estacion 3: lluvia" data-title="Imagen ejemplo tiempo lluvia">
+                        <img source="images/nieve.jpg" alt="Estacion 4: nieve" data-title="Imagen ejemplo tiempo nieve">
+                        <img source="images/electrica.jpg" alt="Estacion 5: electrica" data-title="Imagen ejemplo tiempo tormenta electrica">
+                        <img source="images/viento.jpg" alt="Estacion 6: viento" data-title="Imagen ejemplo tiempo viento">
+                    </div>
+                </div>
+
+                <!-- Boton derecha -->
+                <button type="button" class="nav-btn" id="btn-next"></button>
+             </div>
+            
+             <!-- Div vacio para la caja flotante de informacion -->
+            <div id="info-box"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Universidad de Alcalá</p>
+    </footer>
+
+    <!-- SCRIPT DE JQUERY (Manejo del carrusel y caja flotante) -->
+    <script>
+        $(document).ready(function(){
+            let posicionActual = 0;
+            const anchoImagen = 200;
+            const fotosVisibles = 3;
+            const totalFotos = $('#track img').length;
+            const posicionMaxima = (totalFotos - fotosVisibles) * anchoImagen;
+
+            $('#btn-next').click(function(){
+                if (posicionActual < posicionMaxima){
+                    posicionActual += anchoImagen;
+                    $('#track').css('transform', `translateX(-${posicionActual}px)`);
+                }
+            });
+
+            $('#btn-prev').click(function() {
+                if (posicionActual > 0) {
+                posicionActual -= anchoImagen; 
+                $('#track').css('transform', `translateX(-${posicionActual}px)`);
+                }
+            });
+
+            // --- 2. LÓGICA DE LA CAJA FLOTANTE (HOVER) ---
+            $('#track img').mouseenter(function() {
+                const titulo = $(this).attr('data-title');
+                $('#info-box').text(titulo).show();
+            });
+
+            $('#track img').mousemove(function(evento) {
+                // Hacemos que la caja siga al ratón, sumando píxeles para que no quede justo debajo de la flecha
+                $('#info-box').css({
+                    top: evento.pageY + 15 + 'px',
+                    left: evento.pageX + 15 + 'px'
+                });
+            });
+
+            $('#track img').mouseleave(function() {
+                $('#info-box').hide();
+            });
+        });
+    </script>
+</body>
+</html>

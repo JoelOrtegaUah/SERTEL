@@ -499,3 +499,64 @@ footer {
   margin-top: 20px;
   text-align: center;
 }
+
+/*----------PRACTICA 3----------*/
+
+/* Contenedor principal de la galeria que agrupa los botones y las imagenes */
+.gallery-wrapper{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+/* Contenedor tipo ventana que ocula las imagenes que se salen del ancho */
+.gallery-viewport{
+  width: 600px; /*Ancho del carrusel*/
+  overflow: hidden; /*Todo lo que sobresalga de este ancho, se oculta*/
+  border: 3px solid #111111;
+  border-radius: 6px;
+  background-color: #ffffff;
+}
+
+/* Tira larga donde iran colocadas todas las imagenes una al lado de la otra */
+.gallery-track{
+  display: flex; 
+  transition: transform 0.4s ease-in-out;
+}
+
+/* Estilo individual para cada imagen */
+.gallery-track img{
+  width: 200px; /*Cada imagen ocupará 200px, por lo que cabrán 3 imagenes en el viewport de 600px*/
+  height: 150px;
+  object-fit: cover; /*Evita que la foto se deforme*/
+  cursor: pointer;
+}
+
+/* Botones de control */
+.nav-btn{
+  background-color: #b91c1c;
+  color: #ffffff;
+  border: none;
+  padding: 15px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.nav-btn:hover{
+  background-color: #991b1b;
+}
+
+/* Caja foltante (tooltip) que aparecerá al pasar el ratón sobre una foto */
+#info-box{
+  position: absolute; /*Libre movimiento por la pantalla*/
+  display: none;
+  background-color: rgba(0, 0, 0, 0.8); /*Fondo negro semitransparente*/
+  color: #ffffff;
+  padding: 8px 12px;
+  border-radius: 4px;
+  pointer-events: none; /*Evita parpadeos al pasar el raton*/
+  font-weight: bold;
+}
