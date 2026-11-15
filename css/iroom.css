@@ -536,17 +536,18 @@ footer {
 
 /* Botones de control */
 .nav-btn{
-  background-color: #b91c1c;
-  color: #ffffff;
+  background-color: transparent;
+  color: #b91c1c;
   border: none;
-  padding: 15px;
-  font-size: 1.5rem;
+  padding: 10px;
+  font-size: 3rem;
   cursor: pointer;
-  border-radius: 50%;
+  font-weight: bold;
 }
 
 .nav-btn:hover{
-  background-color: #991b1b;
+  color: #111111;
+  background-color: transparent;
 }
 
 /* Caja foltante (tooltip) que aparecerá al pasar el ratón sobre una foto */
@@ -559,4 +560,48 @@ footer {
   border-radius: 4px;
   pointer-events: none; /*Evita parpadeos al pasar el raton*/
   font-weight: bold;
+}
+
+/* Estilos para el menu de pagina debajo de la tabla */
+.paginacion-container{
+  text-align: center;
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+.page-link{
+  color: #b91c1c;
+  text-decoration: none;
+  margin: 0 10px;
+  cursor: pointer;
+}
+
+.page-link:hover{
+  text-decoration: underline;
+  color: #111111;
+}
+
+/* Estilos de la tabla que jquery aplcará dinámicamente */
+.tabla-formateada{
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.tabla-formateada th{
+  background-color: #111111;
+  color: #ffffff;
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #d1d5db;
+}
+
+.tabla-formateada td {
+  padding: 10px;
+  border: 1px solid #d1d5db;
+}
+
+/* Efecto cebra para las filas */
+.tabla-formateada tr:nth-child(even) td{
+  background-color: #f8f8f8;
 }
