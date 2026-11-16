@@ -41,7 +41,12 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Ciudad</th><th>Temperatura (Cº)</th><th>Humedad (%)</th><th>Ruido</th><th>Nivel de luz</th><th>Color Iluminación</th>
+                                <th>Ciudad</th>
+                                <th>Temperatura (ºC)<br><input type="checkbox" class="check-hist" data-col="1" data-name="Temperatura (ºC)"></th>
+                                <th>Humedad (%)<br><input type="checkbox" class="check-hist" data-col="2" data-name="Humedad (%)"></th>
+                                <th>Ruido<br><input type="checkbox" class="check-hist" data-col="3" data-name="Ruido"></th>
+                                <th>Nivel de luz<br><input type="checkbox" class="check-hist" data-col="4" data-name="Nivel de luz"></th>
+                                <th>Color Iluminación</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -58,7 +63,12 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Ciudad</th><th>Temperatura (ºC)</th><th>Humedad (%)</th><th>Ruido</th><th>Nivel de luz</th><th>Color Iluminación</th>
+                                <th>Ciudad</th>
+                                <th>Temperatura (ºC)<br><input type="checkbox" class="check-hist" data-col="1" data-name="Temperatura (ºC)"></th>
+                                <th>Humedad (%)<br><input type="checkbox" class="check-hist" data-col="2" data-name="Humedad (%)"></th>
+                                <th>Ruido<br><input type="checkbox" class="check-hist" data-col="3" data-name="Ruido"></th>
+                                <th>Nivel de luz<br><input type="checkbox" class="check-hist" data-col="4" data-name="Nivel de luz"></th>
+                                <th>Color Iluminación</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -76,7 +86,12 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Ciudad</th><th>Temperatura (ºC)</th><th>Humedad (%)</th><th>Ruido</th><th>Nivel de luz</th><th>Color Iluminación</th>
+                                <th>Ciudad</th>
+                                <th>Temperatura (ºC)<br><input type="checkbox" class="check-hist" data-col="1" data-name="Temperatura (ºC)"></th>
+                                <th>Humedad (%)<br><input type="checkbox" class="check-hist" data-col="2" data-name="Humedad (%)"></th>
+                                <th>Ruido<br><input type="checkbox" class="check-hist" data-col="3" data-name="Ruido"></th>
+                                <th>Nivel de luz<br><input type="checkbox" class="check-hist" data-col="4" data-name="Nivel de luz"></th>
+                                <th>Color Iluminación</th>
                             </tr>
                         </thead>
                         <tbody id="body-pag3"></tbody>
@@ -88,7 +103,12 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Ciudad</th><th>Temperatura (ºC)</th><th>Humedad (%)</th><th>Ruido</th><th>Nivel de luz</th><th>Color Iluminación</th>
+                                <th>Ciudad</th>
+                                <th>Temperatura (ºC)<br><input type="checkbox" class="check-hist" data-col="1" data-name="Temperatura (ºC)"></th>
+                                <th>Humedad (%)<br><input type="checkbox" class="check-hist" data-col="2" data-name="Humedad (%)"></th>
+                                <th>Ruido<br><input type="checkbox" class="check-hist" data-col="3" data-name="Ruido"></th>
+                                <th>Nivel de luz<br><input type="checkbox" class="check-hist" data-col="4" data-name="Nivel de luz"></th>
+                                <th>Color Iluminación</th>
                             </tr>
                         </thead>
                         <tbody id="body-pag4"></tbody>
@@ -101,6 +121,12 @@
                 <a href="#" class="page-link" data-target="#pagina2">Página 2</a> |
                 <a href="#" class="page-link" data-target="#pagina3">Página 3</a> |
                 <a href="#" class="page-link" data-target="#pagina4">Página 4</a>
+            </div>
+
+            <!-- Contenedor vacion donde se dibujará el histograma -->
+            <div id="histograma-container">
+                <div id="histograma-titulo">Título del gráfico</div>
+                <div id="histograma-barras"></div>
             </div>
 
         </section>
@@ -179,17 +205,75 @@
                 $('.tabla-bloque').hide();
                 $(destino).fadeIn(300);
 
-                // Si elegimos la página 1 o 2 (estáticas), solo le aplicamos el formato
+                //Desmarcamos todos los checkbox y ocultamos el grafico viejo al cambiar de pagina
+                $('.check-hist').prop('checked', false);
+                $('#histograma-container').hide();
+
                 if (destino === '#pagina1' || destino === '#pagina2') {
                     $(destino).find('table').addClass('tabla-formateada');
-                } 
-                // Si pulsamos la 3, lanzamos el JS Puro
-                else if (destino === '#pagina3') {
+                }
+                else if (destino === '#pagina3'){
                     cargarPagina3XML();
-                } 
-                // Si pulsamos la 4, lanzamos el jQuery
-                else if (destino === '#pagina4') {
+                }
+                else if (destino === '#pagina4'){
                     cargarPagina4JSON();
+                }
+            });
+
+            // Ahora es cuando generamos el histograma
+            //Usamos .on() para que funciones tambien en las tablas que se cargan con AJAX
+            $(document).on('change', '.check-hist', function(){
+                // El enunciado pide que solo este marcado 1 a la vez
+                $('.check-hist').not(this).prop('checked', false);
+
+                // Si el usuario acaba de marcar la casilla
+                if ($(this).is(':checked')) {
+                    const indiceColumna = $(this).data('col'); //Con esto sabemos que columna se ha marcado
+                    const nombreColumna = $(this).data('name'); //Con esto sabemos que titulo ponerle al gráfico
+
+                    //Buscamos que tabla se está viendo ahora mismo
+                    const tablaActiva = $('.tabla-bloque:visible table');
+
+                    let datosGrafico = [];
+                    let valorMaximo = 0;
+
+                    //Leemos los datos directamente del html de la tablaActiva
+                    tablaActiva.find('tbody tr').each(function(){
+                        const ciudad = $(this).find('td').eq(0).text();
+
+                        //.eq(indice) selecciona la celda de la columna elegida
+                        const valor = parseFloat($(this).find('td').eq(indiceColumna).text()) || 0;
+
+                        if (valor > valorMaximo) {valorMaximo = valor;}
+                        datosGrafico.push({ciudad: ciudad, valor: valor});
+                    });
+
+                    // Empezamos a generar el codigo HTML para las histograma-barras
+                    let htmlBarras = '';
+
+                    datosGrafico.forEach(function(item){
+                        // Calculamos el porcentaje usando regla de translateX
+                        let anchoPorcentaje = valorMaximo > 0 ? (item.valor /valorMaximo) * 95 : 0;
+
+                        htmlBarras += `
+                            <div class="hist-row">
+                                <div class="hist-label">${item.ciudad}</div>
+                                <div class="hist-bar-container">
+                                    <div class="hist-bar" style="width: ${anchoPorcentaje}%" title="Valor: ${item.valor}"></div>
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    // Ponemos el titulo, metemos el HTML generado y lo mostramos
+                    $('#histograma-titulo').text(nombreColumna);
+                    $('#histograma-barras').html(htmlBarras);
+                    $('#histograma-container').slideDown(400); //Aparece deslizandose
+                }
+
+                else {
+                    // Si el usuario desmarca la casilla, ocultamos el gráfico
+                    $('#histograma-container').slideUp(200);
                 }
             });
         });

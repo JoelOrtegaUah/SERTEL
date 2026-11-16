@@ -607,3 +607,57 @@ footer {
   background-color: #f8f8f8;
 }
 
+/* ----Practica 3 HISTOGRAMA---- */
+#histograma-container{
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 6px;
+  border: 2px solid #b91c1c;
+  display: none; 
+}
+
+#histograma-titulo{
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+.hist-row{
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.hist-label{
+  width: 120px;
+  font-weight: bold;
+  text-align: right;
+  padding-right: 15px;
+}
+
+/* Fondo gris donde crecerá la barra */
+.hist-bar-container{
+  flex-grow: 1;
+  background-color: #f3f4f6;
+  border-radius: 4px;
+  height: 30px;
+}
+
+/* La barra azul */
+.hist-bar{
+  height: 100%;
+  background-color: #b91c1c;
+  border: 1px solid #991b1b;
+  border-radius: 4px;
+  width: 0%;
+  transition: width 0.5s ease-out;
+}
+
+/* Casillas de los encabezados */
+.check-hist{
+  margin-top: 5px;
+  cursor: pointer;
+  transform: scale(1.2);
+}
