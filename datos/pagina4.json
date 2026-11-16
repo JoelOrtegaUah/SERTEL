@@ -1,0 +1,7 @@
+[
+    {"ciudad": "Vigo", "temperatura": 17, "humedad": 85, "ruido": 110, "luz": 80, "color": "#555555"},
+    {"ciudad": "Gijón", "temperatura": 15, "humedad": 82, "ruido": 115, "luz": 85, "color": "#AA0000"},
+    {"ciudad": "Toledo", "temperatura": 30, "humedad": 38, "ruido": 125, "luz": 175, "color": "#00AA00"},
+    {"ciudad": "Santander", "temperatura": 19, "humedad": 78, "ruido": 105, "luz": 95, "color": "#0000AA"},
+    {"ciudad": "Salamanca", "temperatura": 21, "humedad": 42, "ruido": 135, "luz": 165, "color": "#AAAAAA"}
+]

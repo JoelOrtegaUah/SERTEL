@@ -11,6 +11,8 @@
   <title>Smart Room Project - Configuración</title>
   <!--Enlazamos con la hoja de estilos-->
   <link rel="stylesheet" href="css/iroom.css">
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 
 <body>
@@ -80,7 +82,9 @@
           
           <p>
             <label for="city">Ciudad:</label><br>
-            <input type="text" id="city" name="city" required>
+            <select id="city" name="city" required>
+              <option value="">Seleccione primero un país...</option>
+            </select>
           </p>
           
           <p>
@@ -561,6 +565,62 @@
     //Escuchamos al teclear y al salir del campo
     gpsInput.addEventListener('input', actualizarEnlaceGoogleMaps);
     gpsInput.addEventListener('change', actualizarEnlaceGoogleMaps);
+
+    // --Practica 3: Apartado 2.1--
+    
+    // Escuchamos el evento 'change' del campo País
+    document.getElementById('country').addEventListener('change', function(){
+      // Obtenemos el país descrito y lo pasamos a minusculas
+      const paisSeleccionado = this.value.trim().toLowerCase();
+      const citySelect = document.getElementById('city');
+
+      let nombreArchivo = '';
+
+      // Asignamos el archivo de texto correspondiente segun el pais
+      if (paisSeleccionado === 'españa') {
+        nombreArchivo = 'datos/espana.txt';
+      }
+      else if (paisSeleccionado === 'francia') {
+        nombreArchivo = 'datos/francia.txt';
+      }
+      else if (paisSeleccionado === 'italia') {
+        nombreArchivo = 'datos/italia.txt';
+      }
+      else{
+      // Si es Alemania o Portugal (que no estan previamente configurados)
+        citySelect.innerHTML = '<option value="">Sin ciudades configuradas</option>';
+        return;
+      }
+
+      // Si tenemos un archivo asignado, hacemos la petición AJAX con jQuery
+      $.ajax({
+        url: nombreArchivo,
+        type: 'GET',
+        dataType: 'text', //Esperamos texto paisSeleccionado
+        success: function(datos){
+          //Si el arhicvo se lee correctamente, dividimos el texto por saltos de línea
+          const ciudades = datos.split('\n')
+
+          //Preparamos la primera opcion por defecto
+          let opcionesHTML = '<option value="">Seleccione ciudad...</option>';
+
+          //Recorremos cada ciudad leída y creamos una etiqueta <option>
+          ciudades.forEach(function(ciudad) {
+            //Verificamos que la linea no esté en blanco
+            if (ciudad.trim() !=='') {
+              opcionesHTML += `<option value="${ciudad.trim()}">${ciudad.trim()}</option>`;
+            }
+          });
+
+          //Inyectamos las opciones generadas en el desplegable de ciudad
+          citySelect.innerHTML = opcionesHTML;
+        },
+        error: function(){
+          //Si el servidor falla o no encuentra el txt, mostramos un error
+          citySelect.innerHTML = '<option value="">Error al cargar ciudades</option>'
+        }
+      });
+    });
 
   </script>
 

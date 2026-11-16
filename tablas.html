@@ -70,7 +70,8 @@
                         </tbody>
                     </table>
                 </div>
-
+                
+                <!-- Página 3 HTML vacío que se llenará con XML mediante JS -->
                 <div id="pagina3" class="tabla-bloque" style="display: none;">
                     <table>
                         <thead>
@@ -78,17 +79,11 @@
                                 <th>Ciudad</th><th>Temperatura (ºC)</th><th>Humedad (%)</th><th>Ruido</th><th>Nivel de luz</th><th>Color Iluminación</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr><td>Bilbao</td><td>16</td><td>80</td><td>120</td><td>90</td><td>#000000</td></tr>
-                            <tr><td>Málaga</td><td>29</td><td>60</td><td>150</td><td>220</td><td>#FF0000</td></tr>
-                            <tr><td>Murcia</td><td>32</td><td>45</td><td>140</td><td>210</td><td>#00FF00</td></tr>
-                            <tr><td>Palma</td><td>27</td><td>75</td><td>130</td><td>230</td><td>#0000FF</td></tr>
-                            <tr><td>Granada</td><td>34</td><td>40</td><td>160</td><td>180</td><td>#FFFFFF</td></tr>
-                        </tbody>
+                        <tbody id="body-pag3"></tbody>
                     </table>
                 </div>
 
-                <!-- PÁGINA 4 (Oculta por defecto) -->
+                <!-- PÁGINA 4 html vacio que se llenara con un JSON mediante jQuery -->
                 <div id="pagina4" class="tabla-bloque" style="display: none;">
                     <table>
                         <thead>
@@ -96,13 +91,7 @@
                                 <th>Ciudad</th><th>Temperatura (ºC)</th><th>Humedad (%)</th><th>Ruido</th><th>Nivel de luz</th><th>Color Iluminación</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr><td>Vigo</td><td>17</td><td>85</td><td>110</td><td>80</td><td>#555555</td></tr>
-                            <tr><td>Gijón</td><td>15</td><td>82</td><td>115</td><td>85</td><td>#AA0000</td></tr>
-                            <tr><td>Toledo</td><td>30</td><td>38</td><td>125</td><td>175</td><td>#00AA00</td></tr>
-                            <tr><td>Santander</td><td>19</td><td>78</td><td>105</td><td>95</td><td>#0000AA</td></tr>
-                            <tr><td>Salamanca</td><td>21</td><td>42</td><td>135</td><td>165</td><td>#AAAAAA</td></tr>
-                        </tbody>
+                        <tbody id="body-pag4"></tbody>
                     </table>
                 </div>
             </div>
@@ -111,7 +100,7 @@
                 <a href="#" class="page-link" data-target="#pagina1">Página 1</a> |
                 <a href="#" class="page-link" data-target="#pagina2">Página 2</a> |
                 <a href="#" class="page-link" data-target="#pagina3">Página 3</a> |
-                <a href="#" class="page-link" data-target="#pagina4">Página 4</a> |
+                <a href="#" class="page-link" data-target="#pagina4">Página 4</a>
             </div>
 
         </section>
@@ -127,20 +116,81 @@
             // Al cargar la página, aplicamos el formato a la tabla de la pagina 1 que ya esta visible
             $('#pagina1 table').addClass('tabla-formateada');
 
-            // Lógica al hacer click en los enlaces
-            $('.page-link').click(function(evento){
-                // Evitamos que la pantalla pegue un salto hacia arriba
-                evento.preventDefault();
+            //Función 1: AJAX con JAVASCRIPT para leer XML (Página 3)
+            function cargarPagina3XML() {
+                //XMLHttpRequest es el objeto nativo de Javascript para hacer peticiones al servidor
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', 'datos/pagina3.xml', true);
+        
+                //Cuando el servidor responda...
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        const xml = xhr.responseXML;
+                        const estaciones = xml.getElementsByTagName('estacion');
+                        let filasHTML = '';
+            
+                        // Recorremos los datos de XML y construimos las filas de la tabla a mano
+                        for (let i = 0; i < estaciones.length; i++) {
+                            const ciudad = estaciones[i].getElementsByTagName('ciudad')[0].textContent;
+                            const temp = estaciones[i].getElementsByTagName('temperatura')[0].textContent;
+                            const hum = estaciones[i].getElementsByTagName('humedad')[0].textContent;
+                            const ruido = estaciones[i].getElementsByTagName('ruido')[0].textContent;
+                            const luz = estaciones[i].getElementsByTagName('luz')[0].textContent;
+                            const color = estaciones[i].getElementsByTagName('color')[0].textContent;
+              
+                            filasHTML += `<tr><td>${ciudad}</td><td>${temp}</td><td>${hum}</td><td>${ruido}</td><td>${luz}</td><td>${color}</td></tr>`;
+                        }
+            
+                        //Inyectamos las filas generadas en el HTML y le damos formato
+                        document.getElementById('body-pag3').innerHTML = filasHTML;
+                        $('#pagina3 table').addClass('tabla-formateada');
+                    }
+                };
+                xhr.send();
+            }
 
-                // Obtenemos el ID de la tabla a mostrar
+            //Función 2: AJAX con JQUERY para leer JSON (Página 4)
+            function cargarPagina4JSON() {
+                // $.ajax es mucho más directo y convierte los datos automáticamente
+                $.ajax({
+                    url: 'datos/pagina4.json',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(datos) {
+                        let filasHTML = '';
+            
+                        // Recorremos el JSON y construimos las filas
+                        $.each(datos, function(index, estacion) {
+                            filasHTML += `<tr><td>${estacion.ciudad}</td><td>${estacion.temperatura}</td><td>${estacion.humedad}</td><td>${estacion.ruido}</td><td>${estacion.luz}</td><td>${estacion.color}</td></tr>`;
+                        });
+            
+                        // Inyectamos las filas y aplicamos formato
+                        $('#body-pag4').html(filasHTML);
+                        $('#pagina4 table').addClass('tabla-formateada');
+                    }
+                });
+            }
+
+            // Lógica de los botones de paginación
+            $('.page-link').click(function(evento) {
+                evento.preventDefault(); 
                 const destino = $(this).attr('data-target');
-
-                // Ocultamos todas las tablas a la vez
+        
                 $('.tabla-bloque').hide();
-
-                // Mostramos la elegida y le aplicamos el formato CSS mediante jQuery
                 $(destino).fadeIn(300);
-                $(destino).find('table').addClass('tabla-formateada');
+
+                // Si elegimos la página 1 o 2 (estáticas), solo le aplicamos el formato
+                if (destino === '#pagina1' || destino === '#pagina2') {
+                    $(destino).find('table').addClass('tabla-formateada');
+                } 
+                // Si pulsamos la 3, lanzamos el JS Puro
+                else if (destino === '#pagina3') {
+                    cargarPagina3XML();
+                } 
+                // Si pulsamos la 4, lanzamos el jQuery
+                else if (destino === '#pagina4') {
+                    cargarPagina4JSON();
+                }
             });
         });
     </script>

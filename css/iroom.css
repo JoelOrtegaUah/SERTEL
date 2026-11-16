@@ -543,6 +543,7 @@ footer {
   font-size: 3rem;
   cursor: pointer;
   font-weight: bold;
+  border-radius: 0;
 }
 
 .nav-btn:hover{
@@ -602,6 +603,7 @@ footer {
 }
 
 /* Efecto cebra para las filas */
-.tabla-formateada tr:nth-child(even) td{
+.tabla-formateada tr:nth-child(odd) td{
   background-color: #f8f8f8;
 }
+
